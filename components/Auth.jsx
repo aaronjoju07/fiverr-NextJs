@@ -1,9 +1,15 @@
 import React from "react";
-import { Box, Button, Link, Text, useColorMode, useColorModeValue, useToast } from "@chakra-ui/react";
+import { Box, Button, useColorMode, useColorModeValue, useToast,Wrap, WrapItem, Avatar,Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  AvatarBadge, } from "@chakra-ui/react";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { FaGoogle, FaMoon, FaSun } from "react-icons/fa";
 import { auth } from "../firebase";
 import useAuth from "../hooks/useAuth";
+import { ChevronDownIcon } from "@chakra-ui/icons";
+import Link from "next/link";
 const Auth = () => {
   const { toggleColorMode, colorMode } = useColorMode();
   const { isLoggedIn, user } = useAuth();
@@ -18,6 +24,7 @@ const Auth = () => {
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
+        console.log(user)
         toast({ title: "LognIn successfully", status: "success" });
 
         // ...
@@ -40,10 +47,28 @@ const Auth = () => {
     <Box >
       {isLoggedIn && (
         <>
-          <Text color="green.500">{user.email}</Text>
-          <Link color="red.500" onClick={() => auth.signOut()}>
+        <Menu>
+        <MenuButton as={Button}
+                rounded={'full'}
+                variant={'link'}
+                cursor={'pointer'}
+                minW={0}>
+        <Wrap>
+          <WrapItem p={3}>
+          <Avatar size='md' name={user.displayName} src={user.photoURL} >
+          <AvatarBadge  boxSize='1em' bg='green.500' />
+          </Avatar>
+          </WrapItem>
+        </Wrap>
+  </MenuButton>
+  <MenuList>
+  
+    <MenuItem  color="red.500" onClick={() => auth.signOut()}>
             Logout
-          </Link>
+           </MenuItem>
+  </MenuList>
+        </Menu>
+         
         </>
       )}
       {!isLoggedIn && (
