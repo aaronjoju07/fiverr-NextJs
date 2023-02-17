@@ -1,10 +1,11 @@
 import { Inter } from '@next/font/google'
-import { Container } from '@chakra-ui/react'
+import { Box, Container } from '@chakra-ui/react'
 import Head from 'next/head'
 import Navbar from '../components/Navbar'
 import GigCArd from '../components/GigCArd'
 import HomeP from '../components/Home'
 import CategoryButtons from '../components/Category'
+import Loading from '../components/Loading'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,8 +20,9 @@ export default function Home() {
 </Head>
     <Container maxW="7xl">
     
-    <Navbar />
+    
     <CategoryButtons />
+    <Box p={4}></Box>
     <GigCArd />
   </Container>
     </>

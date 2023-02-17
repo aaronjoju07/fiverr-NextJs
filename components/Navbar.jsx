@@ -10,8 +10,8 @@ export default function Navbar() {
       </Box>
       <Stack size="xl" direction="row" spacing={6} display={{ base: 'none', md: 'flex' }}>
         <Button variant="ghost" mr={4}>Browse</Button>
-        <Button variant="ghost" mr={4}>Become a Seller</Button>
-        <Button variant="ghost">Login</Button>
+        <Button variant="ghost" mr={4}>Gig</Button>
+        <Button variant="ghost">Project</Button>
         
       </Stack>
       <Box mr={2} display={{ base: 'none', md: 'block' }}>

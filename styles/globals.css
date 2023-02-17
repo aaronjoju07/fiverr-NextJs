@@ -826,3 +826,7 @@ section+h2 {
   
   
 }
+
+.mlo{
+  display: flex;
+}

@@ -62,7 +62,7 @@ const Auth = () => {
         </Wrap>
   </MenuButton>
   <MenuList>
-  
+  <MenuItem>Profile</MenuItem>
     <MenuItem  color="red.500" onClick={() => auth.signOut()}>
             Logout
            </MenuItem>
