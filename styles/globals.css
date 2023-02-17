@@ -1,6 +1,7 @@
 .logo{
   align-items: center;
   justify-items: center;
+  padding: 1rem;
 }
 
 #navbar {
@@ -830,3 +831,4 @@ section+h2 {
 .mlo{
   display: flex;
 }
+

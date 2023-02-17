@@ -1,5 +1,4 @@
 import { Grid, Box, Button, Text, useColorModeValue } from "@chakra-ui/react";
-
 const CategoryButtons = () => {
   return (
     <Box bg={useColorModeValue('white', 'gray.900')}
@@ -12,6 +11,7 @@ const CategoryButtons = () => {
       gap={4} justifyItems='center'
     >
       <Box width="100%"  >
+      
         <Button
         width="100%"
       px={{ base: 4, md: 6 }}

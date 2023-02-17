@@ -5,7 +5,7 @@ import Auth from './Auth'
 export default function Navbar() {
   return (
     <Flex bg="white" py={4} px={6} align="center" justify="space-between">
-      <Box align="center" justify="space-between">
+      <Box align="center" justify="space-between" p={4}>
         <Image src="fiverr.svg" alt="Logo" boxSize={150} height={10} />
       </Box>
       <Stack size="xl" direction="row" spacing={6} display={{ base: 'none', md: 'flex' }}>
