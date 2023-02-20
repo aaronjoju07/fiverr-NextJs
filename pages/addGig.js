@@ -1,13 +1,15 @@
-import React from 'react'
+import { Box } from '@chakra-ui/react'
+import React, { useState } from 'react'
+import AddGig from '../components/AddGig'
 
 const addGig = () => {
-  
   return (
-    
-   <div>
-    
-   </div>
-    
+
+    <Box>
+      <AddGig />
+    </Box>
+
+
   )
 }
 

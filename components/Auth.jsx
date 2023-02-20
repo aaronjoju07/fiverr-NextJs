@@ -25,7 +25,7 @@ const Auth = () => {
         // The signed-in user info.
         const user = result.user;
         console.log(user)
-        toast({ title: "LognIn successfully", status: "success" });
+        toast({ title: "LogIn successfully", status: "success" });
 
         // ...
       }
@@ -60,6 +60,7 @@ const Auth = () => {
           </Avatar>
           </WrapItem>
         </Wrap>
+       
   </MenuButton>
   <MenuList>
   <MenuItem>Profile</MenuItem>

@@ -38,9 +38,7 @@ const UserAdd = () => {
   return (
     
     <Box w="40%" margin={"0 auto"} display="block" mt={5}>
-    <Box py={"1"}>  
-    <Logo />
-    </Box>
+    
     <Stack direction="column">
     <Input
           placeholder="Full Name"

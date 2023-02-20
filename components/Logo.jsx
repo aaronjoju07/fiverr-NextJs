@@ -1,12 +1,16 @@
+import { Box } from "@chakra-ui/react";
 import Image from "next/image";
 
 export default function Logo(){
     return(
-        <div className='logo'>
+        <Box alignItems='center'
+        justifyItems='center'
+        p={5} >
             <Image  src="fiverr.svg"
       alt="Picture of the author"
       width={150}
-      height={100}   />
-        </div>
+      height={100} 
+      priority />
+        </Box>
     )
 }
