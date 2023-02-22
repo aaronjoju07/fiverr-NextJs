@@ -23,8 +23,8 @@ const Auth = () => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         // The signed-in user info.
-        const user = result.user;
-        console.log(user)
+       const user = result.user;
+        // console.log(user)
         toast({ title: "LogIn successfully", status: "success" });
 
         // ...
@@ -63,7 +63,7 @@ const Auth = () => {
        
   </MenuButton>
   <MenuList>
-  <MenuItem>Profile</MenuItem>
+  <MenuItem><Link href='/profile' >{user.displayName}</Link></MenuItem>
     <MenuItem  color="red.500" onClick={() => auth.signOut()}>
             Logout
            </MenuItem>

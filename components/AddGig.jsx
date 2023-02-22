@@ -12,7 +12,8 @@ import {
     InputGroup,
     Select,
     useToast,
-    InputLeftAddon
+    InputLeftAddon,
+    Text
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { BeatLoader } from 'react-spinners'
@@ -51,6 +52,8 @@ export default function AddGig() {
     return (
 
         <>
+
+        <Text>dfg</Text>
             <Button onClick={onOpen}>Add</Button>
 
             <Modal isOpen={isOpen} onClose={onClose}>

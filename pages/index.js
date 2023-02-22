@@ -1,5 +1,5 @@
 import { Inter } from '@next/font/google'
-import { Box, Container } from '@chakra-ui/react'
+import { Box, Container, Text } from '@chakra-ui/react'
 import Head from 'next/head'
 import GigCArd from '../components/GigCArd'
 import CategoryButtons from '../components/Category'
@@ -16,8 +16,6 @@ export default function Home() {
         <link rel="icon" href="/fiverrlogo.svg" />
 </Head>
     <Container maxW="7xl">
-    
-    
     <CategoryButtons />
     <Box p={4}></Box>
     <GigCArd />

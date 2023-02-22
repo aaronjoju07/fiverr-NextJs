@@ -1,7 +1,7 @@
 import { db } from "../../firebase";
 import {setDoc, collection,addDoc,updateDoc,doc,deleteDoc,documentId } from "firebase/firestore";
 const addUser = async ({ userId, userEmail, fname, nickname,des,skill,pnom,country }) => {
-    const docRef = await setDoc(doc(db, "userDb", userEmail), {
+    const docRef = await addDoc(collection(db, "userDb"), {
       user: userId,
       emailId: userEmail,
       fullName:fname,
