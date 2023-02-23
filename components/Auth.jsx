@@ -8,8 +8,8 @@ import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { FaGoogle, FaMoon, FaSun } from "react-icons/fa";
 import { auth } from "../firebase";
 import useAuth from "../hooks/useAuth";
-import { ChevronDownIcon } from "@chakra-ui/icons";
 import Link from "next/link";
+import { createUserInFirestore } from "../pages/api/user";
 const Auth = () => {
   const { toggleColorMode, colorMode } = useColorMode();
   const { isLoggedIn, user } = useAuth();
@@ -28,6 +28,14 @@ const Auth = () => {
         toast({ title: "LogIn successfully", status: "success" });
 
         // ...
+      const ud ={
+        uid:user.uid,
+        name:user.displayName,
+        email:user.email,
+        photoUrl:user.photoURL,
+      }  
+      createUserInFirestore(ud)    
+      console.log(ud)
       }
       
       )

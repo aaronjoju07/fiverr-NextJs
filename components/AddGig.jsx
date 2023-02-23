@@ -1,5 +1,5 @@
 import {
-    Stack, Modal,
+    Modal,
     ModalOverlay,
     ModalContent,
     ModalHeader,
@@ -13,47 +13,75 @@ import {
     Select,
     useToast,
     InputLeftAddon,
-    Text
+    Text,
+    VStack,
+    Stack,
+    Textarea
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import { BeatLoader } from 'react-spinners'
 import useAuth from '../hooks/useAuth'
 import { addUser } from '../pages/api/user'
 
 export default function AddGig() {
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const { isLoggedIn, user } = useAuth();
+    const { user } = useAuth();
     const toast = useToast();
     const [loading, setLoading] = useState()
     const handleClick = async () => {
         const addCurrentUser = {
             userId: user.uid,
             userEmail: user.email,
-            fname,
-            nickname,
+            userPhoto: user.photoURL,
+            title,
             des,
-            skill,
-            pnom,
-            country
+            sub,
+            notf,
+            time,
+            tags,
+            price,
         }
         setLoading(true)
         await addUser(addCurrentUser);
         console.log(addCurrentUser);
         toast({ title: "User created successfully", status: "success" });
         onClose(true)
+        setTitle("")
+        setCat("")
+        setDes("")
+        setSub("")
+        setNotf("")
+        setTime("")
+        setPrice()
+        setTags([])
         setLoading(false)
     }
-    const [country, setCountry] = React.useState("");
-    const [fname, setFname] = React.useState("");
-    const [nickname, setNname] = React.useState("");
+    const [title, setTitle] = React.useState("");
+    const [sub, setSub] = React.useState("");
     const [des, setDes] = React.useState("");
-    const [skill, setSkill] = React.useState("");
-    const [pnom, setPnom] = React.useState("");
+    const [notf, setNotf] = React.useState("");
+    const [time, setTime] = React.useState("");
+    const [cat, setCat] = React.useState("");
+    const [price, setPrice] = React.useState();
+    const [tags, setTags] = useState([]);
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            const newTag = event.target.value.trim();
+            if (newTag) {
+                setTags([...tags, newTag]);
+                event.target.value = '';
+            }
+        }
+    };
+
+    const handleRemoveTag = (tagToRemove) => {
+        setTags(tags.filter((tag) => tag !== tagToRemove));
+    };
+
     return (
 
         <>
-
-        <Text>dfg</Text>
             <Button onClick={onOpen}>Add</Button>
 
             <Modal isOpen={isOpen} onClose={onClose}>
@@ -63,69 +91,96 @@ export default function AddGig() {
                     <ModalCloseButton />
                     <ModalBody >
                         <Input mb={4}
-                            placeholder="Full Name"
-                            value={fname}
-                            onChange={(e) => setFname(e.target.value)}
+                            placeholder="Title"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
                         />
-                        <Input mb={4}
-                            placeholder="Nick Name"
-                            value={nickname}
-                            onChange={(e) => setNname(e.target.value)}
-                        />
-                        <Input mb={4}
-                            placeholder="Description"
+                        <Textarea mb={4}
+                            placeholder="Aboout Gig"
                             value={des}
                             onChange={(e) => setDes(e.target.value)}
                         />
-                        <Input mb={4}
-                            placeholder="Skills"
-                            value={skill}
-                            onChange={(e) => setSkill(e.target.value)}
-                        />
-                        <InputGroup>
-                            <InputLeftAddon children='+91' />
-                            <Input mb={4} type='tel' placeholder='phone number'
-                                value={pnom}
-                                onChange={(e) => setPnom(e.target.value)} />
-                        </InputGroup>
-                        <Select mb={4} value={country} onChange={(e) => setCountry(e.target.value)}>
+                        <Select  mb={4} value={cat} onChange={(e) => setCat(e.target.value)}>
                             <option
-                                value={"India"}
-                                style={{ fontWeight: "bold" }}
+                                value={"Graphics & Design"}
+                                style={{ color: "yellow", fontWeight: "bold" }}
                             >
-                                India
+                                Graphics & Design
                             </option>
                             <option
-                                value={"USA"}
-                                style={{ fontWeight: "bold" }}
+                                value={"Programming & Tech"}
+                                style={{ color: "green", fontWeight: "bold" }}
                             >
-                                USA
+                                Programming & Tech
                             </option>
                             <option
-                                value={"France"}
-                                style={{ fontWeight: "bold" }}
+                                value={"Music & Audio"}
+                                style={{ color: "green", fontWeight: "bold" }}
                             >
-                                France
+                                Music & Audio
                             </option>
                             <option
-                                value={"UK"}
-                                style={{ fontWeight: "bold" }}
+                                value={"Video & Animation"}
+                                style={{ color: "green", fontWeight: "bold" }}
                             >
-                                UK
-                            </option>
-                            <option
-                                value={"Germany"}
-                                style={{ fontWeight: "bold" }}
+                                Video & Animation
+                            </option> <option
+                                value={"Writhing & Translation"}
+                                style={{ color: "green", fontWeight: "bold" }}
                             >
-                                Germany
-                            </option>
-                            <option
-                                value={"Sri Lanka"}
-                                style={{ fontWeight: "bold" }}
+                                Writhing & Translation
+                            </option> <option
+                                value={"Tutorial"}
+                                style={{ color: "green", fontWeight: "bold" }}
                             >
-                                Sri Lankha
+                                Tutorial
                             </option>
                         </Select>
+                        <Input mb={4}
+                            placeholder="Subject"
+                            value={sub}
+                            onChange={(e) => setSub(e.target.value)}
+                        />
+                        <Input mb={4}
+                            placeholder="Notification"
+                            value={notf}
+                            onChange={(e) => setNotf(e.target.value)}
+                        />
+                        <Input mb={4}
+                            // type='number'
+                            placeholder="Completion Time"
+                            value={time}
+                            onChange={(e) => setTime(e.target.value)}
+                        />
+                        {/* <Input mb={4}
+                            // type='number'
+                            placeholder="Benefits"
+                            value={ben}
+                            onChange={(e) => setBen(e.target.value)}
+                        /> */}
+                        <Input mb={4}
+                            maxLength={10}
+                            type='number'
+                            placeholder="Price"
+                            value={price}
+                            onChange={(e) => setPrice(e.target.value)}
+                        />
+                        <VStack>
+                            {tags.map((tag) => (
+                                <Text key={tag}>
+                                    {tag}{' '}
+                                    <Button type="button" onClick={() => handleRemoveTag(tag)}>
+                                        <XMarkIcon />
+                                    </Button>
+                                </Text>
+                            ))}
+
+                            <Input
+                                placeholder="Benefits"
+                                type="text" onKeyDown={handleKeyDown}
+                            />
+                        </VStack>
+                        
                     </ModalBody>
 
                     <ModalFooter>
@@ -137,14 +192,15 @@ export default function AddGig() {
                         >
                             Close
                         </Button>
-                        {!loading ?
+
+                        {!loading && user ?
                             (<Button onClick={() => handleClick()} colorScheme='blue' >Add</Button>) :
                             (<Button
                                 isLoading
                                 colorScheme='blue'
                                 spinner={<BeatLoader size={8} color='white' />}
                             >
-                                Click me
+                                Add
                             </Button>)}
                     </ModalFooter>
                 </ModalContent>

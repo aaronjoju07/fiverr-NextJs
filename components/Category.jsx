@@ -51,7 +51,7 @@ const CategoryButtons = () => {
         <Button width="100%"
       px={{ base: 4, md: 6 }}
       py={{ base: 2, md: 3 }}>
-          Self Improvement
+          Tutorial
         </Button>
       </Box>
     </Grid>
