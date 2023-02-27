@@ -1,15 +1,16 @@
-import { Flex, Heading, Avatar } from "@chakra-ui/react"
+import { Flex, Heading, Avatar, Box } from "@chakra-ui/react"
 
 export default function Topbar({email}) {
   return (
-    <Flex
+    <Box
       bg="gray.100"
       h="81px" w="100%"
-      align="center"
+      display="flex"
+      flexDirection="row"
       p={5}
     >
       <Avatar src="" marginEnd={3} />
       <Heading size="lg">{email}</Heading>
-    </Flex>
+    </Box>
   )
 }

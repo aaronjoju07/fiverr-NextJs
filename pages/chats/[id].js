@@ -30,25 +30,25 @@ export default function Chat() {
       )
     })
 
-    useEffect(() => {
-      const scrollBottom = () => {
-        bottomOfChat.current.scrollIntoView({
-          behavior: "smooth",
-          block: 'start',
-        });
-      };
-      setTimeout(scrollBottom, 10);
-    }, [messages]);
+    // useEffect(() => {
+    //   const scrollBottom = () => {
+    //     bottomOfChat.current.scrollIntoView({
+    //       behavior: "smooth",
+    //       block: 'start',
+    //     });
+    //   };
+    //   setTimeout(scrollBottom, 10);
+    // }, [messages]);
 
   return (
     <Flex
-      h="100vh"
+      h="85vh"
     >
       <Head><title>Chat App</title></Head>
 
       <Sidebar />
 
-      <Flex flex={1} direction="column">
+      <Flex flex={1} direction="column" w="90vh">
         <Topbar email={getOtherEmail(chat?.users, user)} />
 
         <Flex flex={1} direction="column" pt={4} mx={5} overflowX="scroll" sx={{scrollbarWidth: "none"}}>
