@@ -16,13 +16,17 @@ import {
     Text,
     VStack,
     Stack,
-    Textarea
+    Textarea,
+    Box,
+    Divider
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { BeatLoader } from 'react-spinners'
 import useAuth from '../hooks/useAuth'
 import { addUser } from '../pages/api/user'
+import { CldUploadButton, CldUploadWidget, cloudinaryLoader } from 'next-cloudinary';
 
 export default function AddGig() {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -32,6 +36,7 @@ export default function AddGig() {
     const handleClick = async () => {
         const addCurrentUser = {
             userId: user.uid,
+            name: user.displayName,
             userEmail: user.email,
             userPhoto: user.photoURL,
             title,
@@ -41,6 +46,8 @@ export default function AddGig() {
             time,
             tags,
             price,
+            url,
+            cat
         }
         setLoading(true)
         await addUser(addCurrentUser);
@@ -65,6 +72,9 @@ export default function AddGig() {
     const [cat, setCat] = React.useState("");
     const [price, setPrice] = React.useState();
     const [tags, setTags] = useState([]);
+    const [file, setFile] = useState(null);
+    const [url, setUrl] = useState('');
+    const storage = getStorage();
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             const newTag = event.target.value.trim();
@@ -76,13 +86,56 @@ export default function AddGig() {
     };
 
     const handleRemoveTag = (tagToRemove) => {
-        setTags(tags.filter((tag) => tag !== tagToRemove));
+        setTags(tags.filter((tag) => tag !== tagToRemove));      
+    };
+    const handleSubmit = async (e) => {
+        setFile(e.target.files[0]);
+        if(file){
+
+            const filename = file.name + Math.random(1000000000000, 900000000000)
+            const storageRef = ref(storage, `images/${filename}`);
+            
+            const uploadTask = uploadBytesResumable(storageRef, file);
+            e.preventDefault();
+            uploadTask.on('state_changed',
+            (snapshot) => {
+                // Observe state change events such as progress, pause, and resume
+                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' + progress + '% done');
+                switch (snapshot.state) {
+                    case 'paused':
+                        console.log('Upload is paused');
+                        break;
+                        case 'running':
+                            console.log('Upload is running');
+                            break;
+                        }
+                    },
+                    (error) => {
+                        // Handle unsuccessful uploads
+                    },
+                    () => {
+                        // Handle successful uploads on complete
+                        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+                        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                            //   console.log('File available at', downloadURL);
+                            setUrl(downloadURL)
+                        });
+                    }
+                    );
+                }
+        console.log(url)
+        // Store the downloadUrl in Firestore here
     };
 
     return (
 
         <>
-            <Button onClick={onOpen}>Add</Button>
+            <Box display='flex' justifyContent='center' >
+                <Button onClick={onOpen}>Add GiG</Button>
+            </Box>
+
 
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
@@ -100,7 +153,7 @@ export default function AddGig() {
                             value={des}
                             onChange={(e) => setDes(e.target.value)}
                         />
-                        <Select  mb={4} value={cat} onChange={(e) => setCat(e.target.value)}>
+                        <Select mb={4} value={cat} onChange={(e) => setCat(e.target.value)}>
                             <option
                                 value={"Graphics & Design"}
                                 style={{ color: "yellow", fontWeight: "bold" }}
@@ -152,6 +205,11 @@ export default function AddGig() {
                             value={time}
                             onChange={(e) => setTime(e.target.value)}
                         />
+                        <Button mb={4}
+                        width='100%'
+                        >
+                            <input type="file" onChange={handleSubmit} />
+                        </Button>
                         {/* <Input mb={4}
                             // type='number'
                             placeholder="Benefits"
@@ -166,21 +224,26 @@ export default function AddGig() {
                             onChange={(e) => setPrice(e.target.value)}
                         />
                         <VStack>
-                            {tags.map((tag) => (
-                                <Text key={tag}>
-                                    {tag}{' '}
-                                    <Button type="button" onClick={() => handleRemoveTag(tag)}>
-                                        <XMarkIcon />
-                                    </Button>
-                                </Text>
-                            ))}
+                            <Box >
+                                {tags.map((tag) => (
+                                    <Box
+                                    >
+                                        <Text key={tag}>
+                                            {tag}{' '}
+                                            <Button type="button" backgroundColor="gray.100" onClick={() => handleRemoveTag(tag)}>
+                                                <XMarkIcon />
+                                            </Button>
+                                        </Text>
+                                    </Box>
+                                ))}
+                            </Box>
 
                             <Input
                                 placeholder="Benefits"
                                 type="text" onKeyDown={handleKeyDown}
                             />
                         </VStack>
-                        
+
                     </ModalBody>
 
                     <ModalFooter>

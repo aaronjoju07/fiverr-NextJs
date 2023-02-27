@@ -22,6 +22,6 @@ export default function App({ Component, pageProps }) {
 
   <ChakraProvider>
   <Navbar />
-    <Component user={user} {...pageProps} />
+    <Component use={user} {...pageProps} />
   </ChakraProvider>)
 }

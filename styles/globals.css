@@ -4,6 +4,7 @@
   padding: 1rem;
 }
 
+
 #navbar {
   height: 10%;
   display: flex;
@@ -324,7 +325,7 @@ h4 {
 
 #Products {
   display: flex;
-  width: 98%;
+  width: 35%;
   padding: 0px 10px;
   font-size: 19px;
   margin: auto;
@@ -379,7 +380,6 @@ div+h2{
   padding: 2px 5px;
   display: flex;
   align-items: top;
-  gap: 7px;
 }
 
 .prs-id p {
@@ -404,7 +404,7 @@ div+h2{
 
 .title {
   padding: 0px 6px;
-  height: 90px;
+  height: 65px;
 }
 
 .title p {

@@ -3,17 +3,17 @@ import { Avatar, Box, Center, Heading, SimpleGrid, Text } from "@chakra-ui/react
 import useAuth from '../hooks/useAuth';
 import Profile from '../components/Profile';
 
-const profile = ({user}) => {
+const profile = ({use}) => {
     
     return (
         <>
 
         <Box px="4">
             <Center my="8">
-                <Avatar size="2xl" name={user.displayName} src={user.photoURL} />
+                <Avatar size="2xl" name={use.displayName} src={use.photoURL} />
             </Center>
             <Heading as="h1" mb="4" fontSize="4xl" textAlign="center">
-                {user.displayName}
+                {use.displayName}
             </Heading>
             <SimpleGrid
                 display="flex"
@@ -23,7 +23,7 @@ const profile = ({user}) => {
               >
                 <Box>
                 <Text fontWeight="bold">Email</Text>
-                <Text>{user.email}
+                <Text>{use.email}
                 </Text>
                 <Text fontWeight="bold">Phone</Text>
                 <Text>(555) 555-5555</Text>

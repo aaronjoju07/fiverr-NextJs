@@ -7,7 +7,7 @@ export default function Logo(){
         justifyItems='center'
         p={5}
          >
-            <Image  src="logoStudLance.jpeg"
+            <Image  src="fiverr.svg"
       alt="Picture of the author"
       width={150}
       height={100} 

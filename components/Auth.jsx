@@ -10,6 +10,7 @@ import { auth } from "../firebase";
 import useAuth from "../hooks/useAuth";
 import Link from "next/link";
 import { createUserInFirestore } from "../pages/api/user";
+import { serverTimestamp } from "firebase/firestore";
 const Auth = () => {
   const { toggleColorMode, colorMode } = useColorMode();
   const { isLoggedIn, user } = useAuth();

@@ -1,9 +1,10 @@
 import { db } from "../../firebase";
-import {setDoc, collection,addDoc,updateDoc,doc,deleteDoc,documentId } from "firebase/firestore";
-const addUser = async ({ userId, userEmail, userPhoto, title,des,sub,notf,time,tags,price,cat }) => {
+import {setDoc, collection,addDoc,updateDoc,doc,deleteDoc,documentId, serverTimestamp } from "firebase/firestore";
+const addUser = async ({ userId, userEmail, userPhoto, title,des,sub,notf,time,tags,price,cat,name,url }) => {
   const docRef = await addDoc(collection(db, "Gigs"), {
     user: userId,
     emailId: userEmail,
+    name:name,
     pic:userPhoto,
     title:title,
     category:cat,
@@ -13,6 +14,7 @@ const addUser = async ({ userId, userEmail, userPhoto, title,des,sub,notf,time,t
     timeDuration:time,
     benefitTags:tags,
     price:price,
+    thumbnail:url,
     createdAt: new Date().getTime()
   });
 }
@@ -24,6 +26,7 @@ const createUserInFirestore = async ({uid,name,email,photoUrl}) => {
     displayName: name,
     email:email,
     photoURL:photoUrl,
+    lastSceen:serverTimestamp(),
   },{merge:true});
    
     

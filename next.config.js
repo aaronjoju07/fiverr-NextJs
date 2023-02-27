@@ -2,8 +2,8 @@
 const nextConfig = {
   reactStrictMode: true,
   images:{
-    unoptimized: true,
-    domains:["fiverr-res.cloudinary.com"]
+    loader:'cloudinary',
+    path:'https://res.cloudinary.com/dkpmbfyub/image/upload/',
   }
 }
 
