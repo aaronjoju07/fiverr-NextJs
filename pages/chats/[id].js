@@ -24,19 +24,21 @@ export default function Chat() {
     messages?.map(msg => {
       const sender = msg.sender === user.email;
       return (
-        <Flex key={Math.random()} alignSelf={sender ? "flex-start" : "flex-end"} bg={sender ? "blue.100" : "green.100"} w="fit-content" minWidth="100px" borderRadius="lg" p={3} m={1}>
+        <Flex key={msg.id} alignSelf={sender ? "flex-start" : "flex-end"} bg={sender ? "blue.100" : "green.100"} w="fit-content" minWidth="100px" borderRadius="lg" p={3} m={1}>
           <Text>{msg.text}</Text>
         </Flex>
       )
     })
 
-  useEffect(() =>
-    setTimeout(
-      bottomOfChat.current.scrollIntoView({
-      behavior: "smooth",
-      block: 'start',
-    }), 100)
-  , [messages])
+    useEffect(() => {
+      const scrollBottom = () => {
+        bottomOfChat.current.scrollIntoView({
+          behavior: "smooth",
+          block: 'start',
+        });
+      };
+      setTimeout(scrollBottom, 10);
+    }, [messages]);
 
   return (
     <Flex
