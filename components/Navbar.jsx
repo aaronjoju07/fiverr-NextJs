@@ -11,7 +11,7 @@ export default function Navbar() {
       <Flex bg="white" py={4} px={6} align="center" justify="space-between">
         <Box align="center" justify="space-between" p={5} >
           <Link href='/'>
-            <Image src="fiverr.svg" alt="Logo" boxSize={130} height={10} priority="true" />
+            <Image src="/fiverr.svg" alt="Logo" boxSize={130} height={10} priority="true" />
           </Link>
         </Box>
         <Stack size="xl" direction="row" spacing={6} display={{ base: 'none', md: 'flex' }}>

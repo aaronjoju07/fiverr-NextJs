@@ -154,6 +154,12 @@ export default function AddGig() {
                             onChange={(e) => setDes(e.target.value)}
                         />
                         <Select mb={4} value={cat} onChange={(e) => setCat(e.target.value)}>
+                        <option
+                                value={""}
+                                style={{ color: "yellow", fontWeight: "bold" }}
+                            >
+                                Select
+                            </option>
                             <option
                                 value={"Graphics & Design"}
                                 style={{ color: "yellow", fontWeight: "bold" }}
@@ -228,7 +234,7 @@ export default function AddGig() {
                                 {tags.map((tag) => (
                                     <Box
                                     >
-                                        <Text key={tag}>
+                                        <Text key={tag + Math.random()}>
                                             {tag}{' '}
                                             <Button type="button" backgroundColor="gray.100" onClick={() => handleRemoveTag(tag)}>
                                                 <XMarkIcon />

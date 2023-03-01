@@ -11,6 +11,7 @@ import Sidebar from "../../components/Chat/Sidebar";
 import Topbar from "../../components/Chat/Topbar";
 import Bottombar from "../../components/Chat/Bottombar";
 
+
 export default function Chat() {
   const router = useRouter();
   const { id } = router.query;
@@ -41,6 +42,8 @@ export default function Chat() {
     // }, [messages]);
 
   return (
+    <>
+
     <Flex
       h="85vh"
     >
@@ -61,5 +64,6 @@ export default function Chat() {
 
     </Flex>
 
+    </>
   )
 }

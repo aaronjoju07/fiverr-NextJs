@@ -1,9 +1,6 @@
 import { Avatar } from "@chakra-ui/avatar";
 import { Button } from "@chakra-ui/react";
-import { IconButton } from "@chakra-ui/button";
 import { Flex, Text } from "@chakra-ui/layout";
-import { ArrowLeftIcon } from "@chakra-ui/icons";
-import { signOut } from "firebase/auth";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { collection, addDoc } from "@firebase/firestore";

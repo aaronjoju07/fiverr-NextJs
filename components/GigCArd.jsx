@@ -1,43 +1,32 @@
-import { Box, Image, Badge, Text, Button, useColorModeValue } from '@chakra-ui/react';
+import { Box, Image, Badge, Text, Button, useColorModeValue, Flex } from '@chakra-ui/react';
 
 const GigCArd = ({ gig }) => {
-  return (
-    <section id="Products"><div className="product-box">
-      <img src={gig.thumbnail} alt=''  />
-      <div className="prs-id">
-        <img src={gig.pic} alt='' />
-        <p>@{gig.name}</p>
-      </div>
-      <div className="title">
-        <h5>{gig.title}</h5>
-        <p className="rating">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1792 1792" width="16" height="16">
-            <path fill="currentColor" d="M1728 647q0 22-26 48l-363 354 86 500q1 7 1 20 0 21-10.5 35.5t-30.5 14.5q-19 0-40-12l-449-236-449 236q-22 12-40 12-21 0-31.5-14.5t-10.5-35.5q0-6 2-20l86-500-364-354q-25-27-25-48 0-37 56-46l502-73 225-455q19-41 49-41t49 41l225 455 502 73q56 9 56 46z">
-            </path>
-          </svg><span>5.0</span></p>
-          </div>
-          <div className="pricing">
-        <div>
-          <svg viewBox="0 0 16 13" xmlns="http://www.w3.org/2000/svg">
-            <path d="M15.0769 0H0.923077C0.413276 0 0 0.415736 0 0.928571C0 1.44141 0.413276 1.85714 0.923077 1.85714H15.0769C15.5867 1.85714 16 1.44141 16 0.928571C16 0.415736 15.5867 0 15.0769 0Z">
-            </path>
-            <path d="M15.0769 5.57143H0.923077C0.413276 5.57143 0 5.98717 0 6.5C0 7.01284 0.413276 7.42857 0.923077 7.42857H15.0769C15.5867 7.42857 16 7.01284 16 6.5C16 5.98717 15.5867 5.57143 15.0769 5.57143Z">
-            </path>
-            <path d="M15.0769 11.1429H0.923077C0.413276 11.1429 0 11.5586 0 12.0714C0 12.5843 0.413276 13 0.923077 13H15.0769C15.5867 13 16 12.5843 16 12.0714C16 11.5586 15.5867 11.1429 15.0769 11.1429Z">
-            </path>
-          </svg>
-          <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-            <path d="M14.4469 1.95625C12.7344 0.496875 10.1875 0.759375 8.61561 2.38125L7.99999 3.01562L7.38436 2.38125C5.81561 0.759375 3.26561 0.496875 1.55311 1.95625C-0.409388 3.63125 -0.512513 6.6375 1.24374 8.45312L7.29061 14.6969C7.68124 15.1 8.31561 15.1 8.70624 14.6969L14.7531 8.45312C16.5125 6.6375 16.4094 3.63125 14.4469 1.95625Z">
-            </path>
-          </svg>
-        </div>
-        <div>
-          <span>Starting From</span>
-          ₹{gig.price}</div>
-      </div>
-    
-    </div>
-    </section>
+  return (   
+         <Box p="5" maxW="320px" borderWidth="1px">
+        <Image borderRadius="md" src={gig.thumbnail} />
+        <Flex align="baseline" mt={2}>
+          <Badge colorScheme="pink">Plus</Badge>
+          <Text
+            ml={2}
+            textTransform="uppercase"
+            fontSize="sm"
+            fontWeight="bold"
+            color="pink.800"
+          >
+            Verified &bull; Cape Town
+          </Text>
+        </Flex>
+        <Text mt={2} fontSize="xl" fontWeight="semibold" lineHeight="short">
+        {gig.title}
+        </Text>
+        <Text mt={2}>₹{gig.price}</Text>
+        <Flex mt={2} align="center">
+          <Box  color="orange.400" />
+          <Text ml={1} fontSize="sm">
+            <b>4.84</b> (190)
+          </Text>
+        </Flex>
+      </Box>
   );
 };
 export default GigCArd;

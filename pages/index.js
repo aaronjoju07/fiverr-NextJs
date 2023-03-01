@@ -4,32 +4,37 @@ import Head from 'next/head'
 import GigCArd from '../components/GigCArd'
 import CategoryButtons from '../components/Category'
 import { useEffect, useState } from 'react'
-import { collection, doc, getDoc, onSnapshot, query, where } from 'firebase/firestore'
-import { db } from '../firebase'
+import { collection, doc, getDoc, getDocs, onSnapshot, query, where } from 'firebase/firestore'
+import { auth, db } from '../firebase'
 import useAuth from '../hooks/useAuth'
+import Link from 'next/link'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Home({use}) {
-  const [gigs, setGigs] = useState([]);
-  const { user } = useAuth();
-  const refreshData = () => {
+export default function Home({gigs}) {
+  // const [gigs, setGigs] = useState([]);
+  // const { user } = useAuth();
+  // const refreshData = () => {
    
-    const q = query(collection(db, "Gigs"), where("user", "==", use.uid));
+  //   const q = query(collection(db, "Gigs"), where("user", "==", use.uid));
 
-    onSnapshot(q, (querySnapchot) => {
-      let ar = [];
-      querySnapchot.docs.forEach((doc) => {
-        ar.push({ id: doc.id, ...doc.data() });
-      });
-      setGigs(ar);
-    });
-    console.log(gigs)
-  };
+  //   onSnapshot(q, (querySnapchot) => {
+  //     let ar = [];
+  //     querySnapchot.docs.forEach((doc) => {
+  //       ar.push({ id: doc.id, ...doc.data() });
+  //     });
+  //     setGigs(ar);
+  //   });
+  //   console.log(gigs)
+  // };
 
-  useEffect(() => {
-    refreshData();
-  }, [user]);
+  // useEffect(() => {
+  //   refreshData();
+  // }, [user]);
+
+console.log(gigs)
 
   return (
     <>
@@ -43,10 +48,39 @@ export default function Home({use}) {
         <CategoryButtons />
         <Box p={4} display='flex'>
         {gigs && gigs.map((gig)=>(
-        <GigCArd key={gig.id} gig={gig} />
+        <Link
+        key={gig.id}
+        href={`/gigs/${gig.id}`}
+        >
+        <GigCArd key={gig.id} gig={gig}  />
+        </Link>
         ))}
         </Box>
       </Container>
     </>
   )
+}
+
+export async function getServerSideProps() {
+  // const auth = getAuth();
+  // let user = null;
+
+  // await new Promise((resolve) => {
+  //   onAuthStateChanged(auth, (authUser) => {
+  //     user = authUser;
+  //     resolve();
+  //   });
+  // });  
+  const q = await getDocs(collection(db, "Gigs"), where("e", "==", true));
+  const gigs = q.docs && q.docs.length > 0 ? q.docs.map((doc) => {
+    return {
+      id: doc.id,
+      ...doc.data(),
+    };
+  }) : [];
+  return {
+    props: {
+      gigs
+    },
+  };
 }
