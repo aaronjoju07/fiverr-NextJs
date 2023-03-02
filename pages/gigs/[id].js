@@ -53,7 +53,7 @@ const gig = ({ gigs }) => {
             <SimpleGrid
                 columns={{ base: 1, lg: 2 }}
                 spacing={{ base: 8, md: 10 }}
-                py={{ base: 18, md: 0 }}>
+                py={{ base: 10, md: 0 }}>
                 <Flex>
                     <Image
                         rounded={'md'}
@@ -69,19 +69,18 @@ const gig = ({ gigs }) => {
                 </Flex>
                 <Stack spacing={{ base: 6, md: 10 }}>
                     <Box as={'header'}>
-                        <Box display='flex' justifyContent='space-between' width={"26%"} alignItems='center' >
-                            <Avatar size='sm' name={gigs.nmae} src={gigs.pic} ></Avatar>
-                            <Text>@{gigs.name}</Text><Tooltip label={`e-mail : ${gigs.emailId}`} fontSize='md'>
-                                <InfoIcon boxSize={5} />
-                            </Tooltip>
-                        </Box>
-
                         <Heading
                             lineHeight={1.1}
                             fontWeight={600}
                             fontSize={{ base: '2xl', sm: '4xl', lg: '5xl' }}>
                             {gigs.title} {' '} 
                         </Heading>
+                        <Box boxShadow={'sm'} backgroundColor={'gray.50'} rounded='lg' display='flex' justifyContent='space-between' width={"26%"} alignItems='center' >
+                            <Avatar size='xs' name={gigs.nmae} src={gigs.pic} ></Avatar>
+                            <Text>@{gigs.name}</Text><Tooltip label={`e-mail : ${gigs.emailId}`} fontSize='md'>
+                                <InfoIcon boxSize={5} />
+                            </Tooltip>
+                        </Box>
 
                         <Text
                             color={useColorModeValue('gray.900', 'gray.400')}
@@ -153,9 +152,9 @@ const gig = ({ gigs }) => {
                     <Button
                         rounded={'xl'}
                         w={'full'}
-                        mt={8}
+                        mt={2}
                         size={'lg'}
-                        py={'7'}
+                        py={'2'}
                         bg={useColorModeValue('gray.900', 'gray.50')}
                         color={useColorModeValue('white', 'gray.900')}
                         textTransform={'uppercase'}
@@ -165,7 +164,6 @@ const gig = ({ gigs }) => {
                         }}>
                         Continue
                     </Button>
-
                     <Stack direction="row" alignItems="center" justifyContent={'center'}>
                         <ChatIcon />
                         <Button variant='ghost' onClick={() => newChat()}>Chat</Button>

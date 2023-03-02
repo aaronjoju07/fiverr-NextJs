@@ -1,5 +1,5 @@
 import { Inter } from '@next/font/google'
-import { Box, Container, Text } from '@chakra-ui/react'
+import { Box, Container, filter, Text } from '@chakra-ui/react'
 import Head from 'next/head'
 import GigCArd from '../components/GigCArd'
 import CategoryButtons from '../components/Category'
@@ -9,32 +9,22 @@ import { auth, db } from '../firebase'
 import useAuth from '../hooks/useAuth'
 import Link from 'next/link'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { getAuth } from 'firebase/auth'
+import { refreshData } from './api/gigList'
+import { async } from '@firebase/util'
+import gig from './gigs/[id]'
+import { useCollection } from 'react-firebase-hooks/firestore'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home({gigs}) {
-  // const [gigs, setGigs] = useState([]);
-  // const { user } = useAuth();
-  // const refreshData = () => {
-   
-  //   const q = query(collection(db, "Gigs"), where("user", "==", use.uid));
-
-  //   onSnapshot(q, (querySnapchot) => {
-  //     let ar = [];
-  //     querySnapchot.docs.forEach((doc) => {
-  //       ar.push({ id: doc.id, ...doc.data() });
-  //     });
-  //     setGigs(ar);
-  //   });
-  //   console.log(gigs)
-  // };
-
-  // useEffect(() => {
-  //   refreshData();
-  // }, [user]);
-
+  const [user] = useAuthState(auth);
+  // const userId = user.uid
+  // const [snapshot, loading, error] = useCollection(collection(db, "Gigs"),where('user', '!=', userId));
+  // const gigs = snapshot?.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 console.log(gigs)
+console.log(user.email)
+
 
   return (
     <>
@@ -47,32 +37,23 @@ console.log(gigs)
       <Container maxW="7xl">
         <CategoryButtons />
         <Box p={4} display='flex'>
-        {gigs && gigs.map((gig)=>(
-        <Link
-        key={gig.id}
-        href={`/gigs/${gig.id}`}
-        >
-        <GigCArd key={gig.id} gig={gig}  />
-        </Link>
-        ))}
+          {gigs && gigs.map((gig) => (
+            <Link
+              key={gig.id}
+              href={`/gigs/${gig.id}`}
+            >
+              <GigCArd  key={gig.id} gig={gig} />
+            </Link>
+          ))}
         </Box>
       </Container>
     </>
   )
 }
 
-export async function getServerSideProps() {
-  // const auth = getAuth();
-  // let user = null;
-
-  // await new Promise((resolve) => {
-  //   onAuthStateChanged(auth, (authUser) => {
-  //     user = authUser;
-  //     resolve();
-  //   });
-  // });  
-  const q = await getDocs(collection(db, "Gigs"), where("e", "==", true));
-  const gigs = q.docs && q.docs.length > 0 ? q.docs.map((doc) => {
+export async function getServerSideProps(context) {
+  const q = await getDocs(collection(db, "Gigs"));
+  const gigs = q.docs && q.docs.length > 0 ? q.docs.map((doc) => { 
     return {
       id: doc.id,
       ...doc.data(),

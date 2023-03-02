@@ -8,7 +8,7 @@ export default function Navbar() {
   return (
     <>
 
-      <Flex bg="white" py={4} px={6} align="center" justify="space-between">
+      <Flex bg="white" py={4} px={4} align="center" justify="space-between">
         <Box align="center" justify="space-between" p={5} >
           <Link href='/'>
             <Image src="/fiverr.svg" alt="Logo" boxSize={130} height={10} priority="true" />

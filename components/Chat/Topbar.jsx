@@ -9,7 +9,7 @@ export default function Topbar({email}) {
       flexDirection="row"
       p={5}
     >
-      <Avatar src="" marginEnd={3} />
+      <Avatar name={email} src="" marginEnd={3} />
       <Heading size="lg">{email}</Heading>
     </Box>
   )

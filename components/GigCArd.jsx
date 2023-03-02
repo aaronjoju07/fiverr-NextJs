@@ -2,8 +2,8 @@ import { Box, Image, Badge, Text, Button, useColorModeValue, Flex } from '@chakr
 
 const GigCArd = ({ gig }) => {
   return (   
-         <Box p="5" maxW="320px" borderWidth="1px">
-        <Image borderRadius="md" src={gig.thumbnail} />
+         <Box p="5" maxW="320px" borderWidth="1px" marginLeft={"1rem"}>
+        <Image borderRadius="md"  src={gig.thumbnail} alt="pic" height={"13rem"} width={"18rem"} />
         <Flex align="baseline" mt={2}>
           <Badge colorScheme="pink">Plus</Badge>
           <Text

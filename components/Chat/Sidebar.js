@@ -1,6 +1,6 @@
 import { Avatar } from "@chakra-ui/avatar";
-import { Button } from "@chakra-ui/react";
-import { Flex, Text } from "@chakra-ui/layout";
+import { Button, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/layout";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { collection, addDoc } from "@firebase/firestore";
@@ -25,21 +25,25 @@ export default function Sidebar() {
   }
   
   const chatList = () => {
-    return (
-      chats?.filter(chat => chat.users.includes(user.email))
-      .map(
-        chat => 
-        <Flex key={chat.id}
-           p={3}
-            align="center"
-            _hover={{bg: "gray.100", cursor: "pointer"}} 
-            onClick={() => redirect(chat.id)}>
-            <Avatar src="" marginEnd={3} />
-            <Text>{getOtherEmail(chat.users, user)}</Text>
-          </Flex>
-      )
-      )
-    }
+    return ( chats ? (chats?.filter(chat => chat.users.includes(user.email))
+    .map(
+      chat => 
+      <Flex key={chat.id}
+         p={3}
+          align="center"
+          _hover={{bg: "gray.100", cursor: "pointer"}} 
+          onClick={() => redirect(chat.id)}>
+          <Avatar name={getOtherEmail(chat.users,user)} src="" marginEnd={3} />
+          <Text>{getOtherEmail(chat.users, user)}</Text>
+        </Flex>
+    )):(
+      <Box padding='6' boxShadow='lg' bg='white'>
+  <SkeletonCircle size='10' />
+  <SkeletonText mt='4' noOfLines={1} spacing='4' skeletonHeight='4' />
+</Box>
+    )
+      
+      )}
     
     const redirect = (id) => {
       router.push(`/chats/${id}`);
@@ -52,7 +56,7 @@ export default function Sidebar() {
       borderEnd="1px solid" borderColor="gray.200"
       direction="column"
     >
-      <Button m={5} p={4} onClick={() => newChat()}>New Chat</Button>
+      {/* <Button m={5} p={4} onClick={() => newChat()}>New Chat</Button> */}
 
       <Flex overflowX="scroll" direction="column" sx={{scrollbarWidth: "none"}} flex={1} >
         {chatList()}
