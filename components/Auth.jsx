@@ -36,7 +36,7 @@ const Auth = () => {
         photoUrl:user.photoURL,
       }  
       createUserInFirestore(ud)    
-      console.log(ud)
+      // console.log(ud)
       }
       
       )
