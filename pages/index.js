@@ -21,11 +21,11 @@ export default function Home({ gigs }) {
   const day = new Date()
   const dayDate = day.toISOString().slice(0, 10)
   const Today = dayDate
-  console.log(Today)
+  // console.log(Today)
   async function addToSubcollection({ gg }) {
     const docRef = doc(db, `Gigs/${gg}/CountView`, `${Today}`);
     const docSnap = await getDoc(docRef);
-
+    console.log(docSnap.data())
     if (docSnap.exists()) {
      const counts = docSnap.data()
      const count = counts.count
@@ -34,6 +34,7 @@ export default function Home({ gigs }) {
     })
     } else {
       await setDoc(doc(db, "Gigs", gg.toLocaleString(), "CountView", Today), {
+        date:Today,
         count: 1,
       })
     }

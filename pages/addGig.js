@@ -1,13 +1,35 @@
-import { Box, Stack, Text } from '@chakra-ui/react'
+import { Box, Skeleton, Stack, Text } from '@chakra-ui/react'
+import { collection, getDocs, onSnapshot, query, where } from 'firebase/firestore'
 import Head from 'next/head'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useAuthState } from 'react-firebase-hooks/auth'
 import AddGig from '../components/AddGig'
 import DisplayGig from '../components/DisplayGig'
-import ImageInput from '../components/ImageInput'
-import TagsInput from '../components/TagsInput'
-import Upload from '../components/Upload'
+import { auth, db } from '../firebase'
 
-const addGig = ({ user }) => {
+const addGig = () => {
+  const [user] = useAuthState(auth);
+  const [todos, setTodos] = React.useState([]);
+  const refreshData = () => {
+    if (!user) {
+      setTodos([]);
+      return;
+    }
+
+    const q = query(collection(db, "Gigs"), where("user", "==", user.uid));
+
+    onSnapshot(q, (querySnapchot) => {
+
+      let ar = [];
+      querySnapchot.docs.forEach((doc) => {
+        ar.push({ id: doc.id, ...doc.data() });
+      });
+      setTodos(ar);
+    });
+  };
+  useEffect(() => {
+    refreshData();
+  }, [user]);
   return (
 
     <>
@@ -17,9 +39,14 @@ const addGig = ({ user }) => {
       </Head>
 
       <Stack>
-        <AddGig />
-        <DisplayGig />
-        <Upload />
+        {todos.length > 0 ? (null) : (<AddGig todo={todos} />)}
+
+        <Box display='flex'
+          justifyContent='center'        >
+          {todos && todos.map((todo) => (
+            <DisplayGig key={todo.id} gig={todo} />
+          ))}
+        </Box>
       </Stack>
     </>
 

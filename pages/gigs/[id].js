@@ -19,25 +19,39 @@ import {
     useToast,
     Tooltip,
     Avatar,
-    AvatarBadge,
+    Drawer,
+    DrawerBody,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerOverlay,
+    DrawerContent,
+    DrawerCloseButton,
+    useDisclosure,
+    Input,
+    Checkbox,
 } from '@chakra-ui/react';
-import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
-import { MdLocalShipping } from 'react-icons/md';
-import { addDoc, collection, doc, getDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '../../firebase';
 import { useCollection } from 'react-firebase-hooks/firestore';
+import { useEffect, useRef, useState } from 'react';
+import { addProject } from '../api/project';
 
 const gig = ({ gigs }) => {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const btnRef = useRef()
     const toast = useToast();
     const router = useRouter();
-    const { id } = router.query;
+    const { id } = router.query; // id is the name of the dynamic parameter in the URL
     const [user] = useAuthState(auth);
     const [snapshot, loading, error] = useCollection(collection(db, "chats"));
     const chats = snapshot?.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     const chatExists = email => chats?.find(chat => (chat.users.includes(user.email) && chat.users.includes(email)))
-
+    const [isChecked, setIsChecked] = useState(false);
+    function handleCheckboxChange(event) {
+      setIsChecked(event.target.checked);
+    }
     const newChat = async () => {
         const input = gigs.emailId;
         if (!chatExists(input)) {
@@ -48,6 +62,32 @@ const gig = ({ gigs }) => {
     function notf() {
         toast({ title: `${gigs.notification}`, isClosable: true, position: 'top' });
     }
+    const iid = user.uid + id
+    console.log(iid)
+    // console.log(gigs)
+    const handleSubmit = async () => {
+        const dataToSubmit = {
+            reqUser: user.email,
+            gigUser: gigs.emailId,
+            projectaReqStatus: false,
+            gigPrice: gigs.price,
+            promisedTime: gigs.timeDuration,
+            category:gigs.category,
+            id: iid,
+            timeFact:isChecked
+        }
+        addProject(dataToSubmit)
+    }
+    async function checkProject(){
+        const docRef = doc(db, "project", iid);
+    const docSnaps = await getDoc(docRef);
+    if(docSnaps.exists()){
+        setdocsnaps(docSnaps)}
+    }
+    const [docSnap,setdocsnaps] = useState()
+    useEffect(() => {
+        checkProject();
+      }, [user]);
     return (
         <Container maxW={'7xl'} onLoad={notf}>
             <SimpleGrid
@@ -73,7 +113,7 @@ const gig = ({ gigs }) => {
                             lineHeight={1.1}
                             fontWeight={600}
                             fontSize={{ base: '2xl', sm: '4xl', lg: '5xl' }}>
-                            {gigs.title} {' '} 
+                            {gigs.title} {' '}
                         </Heading>
                         <Box boxShadow={'sm'} backgroundColor={'gray.50'} rounded='lg' display='flex' justifyContent='space-between' width={"26%"} alignItems='center' >
                             <Avatar size='xs' name={gigs.nmae} src={gigs.pic} ></Avatar>
@@ -150,6 +190,7 @@ const gig = ({ gigs }) => {
                     </Stack>
 
                     <Button
+                        ref={btnRef} colorScheme='teal' onClick={onOpen}
                         rounded={'xl'}
                         w={'full'}
                         mt={2}
@@ -170,6 +211,35 @@ const gig = ({ gigs }) => {
                     </Stack>
                 </Stack>
             </SimpleGrid>
+            <Drawer
+                isOpen={isOpen}
+                placement='right'
+                onClose={onClose}
+                finalFocusRef={btnRef}
+            >
+                <DrawerOverlay />
+                <DrawerContent>
+                    <DrawerCloseButton />
+                    <DrawerHeader>Confirmation</DrawerHeader>
+
+                    {!docSnap ? <DrawerBody>
+                        <Text as='b'>Are you sure you want to request this gig?</Text>
+                        <List>
+                            <ListItem><Text as='i'>{gigs.title}</Text></ListItem>
+                            <ListItem><Text as='i'>Expected Delivery Time : {gigs.timeDuration}</Text></ListItem>
+                            <ListItem><Text as='i'>₹{gigs.price}</Text></ListItem>
+                            <Checkbox size='md' checked={isChecked}
+                                onChange={handleCheckboxChange} >Take your time </Checkbox>
+                        </List>
+                    </DrawerBody>  : <DrawerBody><Text>You have already a project running!!!!!!</Text></DrawerBody>}
+                    <DrawerFooter>
+                        <Button variant='outline' mr={3} onClick={onClose}>
+                            Cancel
+                        </Button>
+                        {!docSnap ? <Button  colorScheme='blue' onClick={() => handleSubmit()}>Confirm</Button>: <Button disabled={true}>Confirm</Button>}
+                    </DrawerFooter>
+                </DrawerContent>
+            </Drawer>
         </Container>
     );
 }
@@ -182,7 +252,7 @@ export async function getServerSideProps(context) {
     const docSnap = await getDoc(docRef);
     return {
         props: {
-            gigs: docSnap.data()
+            gigs: ( docSnap.data()),
         },
     };
 }

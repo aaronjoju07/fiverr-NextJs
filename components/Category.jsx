@@ -47,13 +47,13 @@ const CategoryButtons = () => {
           Writhing & Translation
         </Button>
       </Box>
-      <Box width="100%">
+      {/* <Box width="100%">
         <Button width="100%"
       px={{ base: 4, md: 6 }}
       py={{ base: 2, md: 3 }}>
           Tutorial
         </Button>
-      </Box>
+      </Box> */}
     </Grid>
     </Box>
   );

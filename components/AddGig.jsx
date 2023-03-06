@@ -86,45 +86,45 @@ export default function AddGig() {
     };
 
     const handleRemoveTag = (tagToRemove) => {
-        setTags(tags.filter((tag) => tag !== tagToRemove));      
+        setTags(tags.filter((tag) => tag !== tagToRemove));
     };
     const handleSubmit = async (e) => {
         setFile(e.target.files[0]);
-        if(file){
+        if (file) {
 
             const filename = file.name + Math.random(1000000000000, 900000000000)
             const storageRef = ref(storage, `images/${filename}`);
-            
+
             const uploadTask = uploadBytesResumable(storageRef, file);
             e.preventDefault();
             uploadTask.on('state_changed',
-            (snapshot) => {
-                // Observe state change events such as progress, pause, and resume
-                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log('Upload is ' + progress + '% done');
-                switch (snapshot.state) {
-                    case 'paused':
-                        console.log('Upload is paused');
-                        break;
+                (snapshot) => {
+                    // Observe state change events such as progress, pause, and resume
+                    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload is ' + progress + '% done');
+                    switch (snapshot.state) {
+                        case 'paused':
+                            console.log('Upload is paused');
+                            break;
                         case 'running':
                             console.log('Upload is running');
                             break;
-                        }
-                    },
-                    (error) => {
-                        // Handle unsuccessful uploads
-                    },
-                    () => {
-                        // Handle successful uploads on complete
-                        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-                        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                            //   console.log('File available at', downloadURL);
-                            setUrl(downloadURL)
-                        });
                     }
-                    );
+                },
+                (error) => {
+                    // Handle unsuccessful uploads
+                },
+                () => {
+                    // Handle successful uploads on complete
+                    // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                        //   console.log('File available at', downloadURL);
+                        setUrl(downloadURL)
+                    });
                 }
+            );
+        }
         console.log(url)
         // Store the downloadUrl in Firestore here
     };
@@ -154,7 +154,7 @@ export default function AddGig() {
                             onChange={(e) => setDes(e.target.value)}
                         />
                         <Select mb={4} value={cat} onChange={(e) => setCat(e.target.value)}>
-                        <option
+                            <option
                                 value={""}
                                 style={{ color: "yellow", fontWeight: "bold" }}
                             >
@@ -188,12 +188,13 @@ export default function AddGig() {
                                 style={{ color: "green", fontWeight: "bold" }}
                             >
                                 Writhing & Translation
-                            </option> <option
+                            </option>
+                            {/* <option
                                 value={"Tutorial"}
                                 style={{ color: "green", fontWeight: "bold" }}
                             >
                                 Tutorial
-                            </option>
+                            </option> */}
                         </Select>
                         <Input mb={4}
                             placeholder="Subject"
@@ -212,7 +213,7 @@ export default function AddGig() {
                             onChange={(e) => setTime(e.target.value)}
                         />
                         <Button mb={4}
-                        width='100%'
+                            width='100%'
                         >
                             <input type="file" onChange={handleSubmit} />
                         </Button>

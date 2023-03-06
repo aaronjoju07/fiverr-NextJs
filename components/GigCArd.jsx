@@ -1,4 +1,4 @@
-import { Box, Image, Badge, Text, Button, useColorModeValue, Flex } from '@chakra-ui/react';
+import { Box, Image, Badge, Text, Flex } from '@chakra-ui/react';
 
 const GigCArd = ({ gig }) => {
   return (   

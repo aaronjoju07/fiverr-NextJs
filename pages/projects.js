@@ -1,42 +1,48 @@
-import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
-import { getAuth } from 'firebase/auth';
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { useState } from 'react';
+import {
+  Box, Tab, TabList, TabPanel, TabPanels, Tabs, Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  useColorModeValue,
+  Button,
+} from '@chakra-ui/react'
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
-import {  auth, db } from '../firebase';
+import ApprovedOrders from '../components/ApprovedOrders';
+import { auth, db } from '../firebase';
 
 
 const projects = () => {
-  const [user] = useAuthState(auth);
-  const [gigs,setGigs] = useState()
-  const userId = user.uid
-  async function calldata(){
-    const q = query(collection(db, "Gigs"), where("user", "!=", user.uid));
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      setGigs(doc.data())
-    });
-  }
-  console.log(gigs)
+
   return (
     <Box display='flex'
-            justifyContent='center'
+      justifyContent='center'
     >
-        <Tabs variant='soft-rounded' colorScheme='green'>
-  <TabList>
-    <Tab>Your Projects</Tab>
-    <Tab>Requests</Tab>
-  </TabList>
-  <TabPanels>
-    <TabPanel>
-      <p>one!</p>
-    </TabPanel>
-    <TabPanel>
-      <p>two!</p>
-    </TabPanel>
-  </TabPanels>
-</Tabs>
+      <Tabs variant='soft-rounded' colorScheme='green'>
+        <TabList>
+          <Tab>Your Projects</Tab>
+          <Tab>Order</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            <Box bg={useColorModeValue('white', 'gray.900')}
+              boxShadow={'md'}
+              rounded={'lg'} >
+              <ApprovedOrders />
+            </Box>
+          </TabPanel>
+          <TabPanel>
+            <Box bg={useColorModeValue('white', 'gray.900')}
+              boxShadow={'md'}
+              rounded={'lg'} >
+              <ApprovedOrders />
+            </Box>
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </Box>
   )
 }
