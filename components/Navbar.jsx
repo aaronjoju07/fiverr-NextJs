@@ -15,21 +15,26 @@ export default function Navbar() {
           </Link>
         </Box>
         <Stack size="xl" direction="row" spacing={6} display={{ base: 'none', md: 'flex' }}>
-          <Button variant="ghost" mr={4}>
-          <Link href='/chat'>Chat</Link>
-          </Button>
-          <Button variant="ghost" mr={4}>
-            <Link href='/addGig'>Gig</Link>
+          <Button variant="ghost">
+            <Link href='/'>Home</Link>
           </Button>
           <Button variant="ghost">
-            <Link href='/projects'>Project</Link>
+            <Link href='/project'>Project</Link>
           </Button>
-
+          <Button variant="ghost" mr={4}>
+            <Link href='/chat'>Chat</Link>
+          </Button>
+          <Button variant="ghost" mr={4}>
+            <Link href='/addGig'>Post</Link>
+          </Button>
+          <Button variant="ghost">
+            <Link href='/projects'>Status</Link>
+          </Button>
         </Stack>
-        <Box mr={2} display={{ base: 'none', md: 'flex' }} flexDirection='row'> 
-<Box p={5}>
-          <Notification />
-</Box>
+        <Box mr={2} display={{ base: 'none', md: 'flex' }} flexDirection='row'>
+          <Box p={5}>
+            <Notification />
+          </Box>
           <Auth />
 
         </Box>

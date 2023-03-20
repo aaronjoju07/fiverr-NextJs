@@ -5,7 +5,7 @@ const GigCArd = ({ gig }) => {
          <Box p="5" maxW="320px" borderWidth="1px" marginLeft={"1rem"}>
         <Image borderRadius="md"  src={gig.thumbnail} alt="pic" height={"13rem"} width={"18rem"} />
         <Flex align="baseline" mt={2}>
-          <Badge colorScheme="pink">Plus</Badge>
+          {/* <Badge colorScheme="pink">Plus</Badge>
           <Text
             ml={2}
             textTransform="uppercase"
@@ -14,7 +14,7 @@ const GigCArd = ({ gig }) => {
             color="pink.800"
           >
             Verified &bull; Cape Town
-          </Text>
+          </Text> */}
         </Flex>
         <Text mt={2} fontSize="xl" fontWeight="semibold" lineHeight="short">
         {gig.title}

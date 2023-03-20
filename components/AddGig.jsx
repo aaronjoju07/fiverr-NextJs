@@ -26,7 +26,6 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { BeatLoader } from 'react-spinners'
 import useAuth from '../hooks/useAuth'
 import { addUser } from '../pages/api/user'
-import { CldUploadButton, CldUploadWidget, cloudinaryLoader } from 'next-cloudinary';
 
 export default function AddGig() {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -63,6 +62,8 @@ export default function AddGig() {
         setPrice()
         setTags([])
         setLoading(false)
+        onClose()
+
     }
     const [title, setTitle] = React.useState("");
     const [sub, setSub] = React.useState("");
@@ -143,17 +144,17 @@ export default function AddGig() {
                     <ModalHeader>Add Gig</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody >
-                        <Input mb={4}
+                        <Input mb={4} required
                             placeholder="Title"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                         />
-                        <Textarea mb={4}
+                        <Textarea mb={4} required
                             placeholder="Aboout Gig"
                             value={des}
                             onChange={(e) => setDes(e.target.value)}
                         />
-                        <Select mb={4} value={cat} onChange={(e) => setCat(e.target.value)}>
+                        <Select mb={4} value={cat} onChange={(e) => setCat(e.target.value)} required >
                             <option
                                 value={""}
                                 style={{ color: "yellow", fontWeight: "bold" }}
@@ -196,22 +197,25 @@ export default function AddGig() {
                                 Tutorial
                             </option> */}
                         </Select>
-                        <Input mb={4}
+                        <Input mb={4} required
                             placeholder="Subject"
                             value={sub}
                             onChange={(e) => setSub(e.target.value)}
                         />
-                        <Input mb={4}
+                        <Input mb={4} required
                             placeholder="Notification"
                             value={notf}
                             onChange={(e) => setNotf(e.target.value)}
                         />
-                        <Input mb={4}
-                            // type='number'
+                        <Box>
+                        <Input mb={4} required
+                            type='number'
                             placeholder="Completion Time"
                             value={time}
                             onChange={(e) => setTime(e.target.value)}
                         />
+                        <Text>Days</Text>
+                        </Box>
                         <Button mb={4}
                             width='100%'
                         >
@@ -223,7 +227,7 @@ export default function AddGig() {
                             value={ben}
                             onChange={(e) => setBen(e.target.value)}
                         /> */}
-                        <Input mb={4}
+                        <Input mb={4} required
                             maxLength={10}
                             type='number'
                             placeholder="Price"

@@ -29,6 +29,7 @@ import {
     useDisclosure,
     Input,
     Checkbox,
+    Textarea,
 } from '@chakra-ui/react';
 import { addDoc, collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { useRouter } from 'next/router';
@@ -39,6 +40,7 @@ import { useEffect, useRef, useState } from 'react';
 import { addProject } from '../api/project';
 
 const gig = ({ gigs }) => {
+    const [sug, setSug] = useState()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const btnRef = useRef()
     const toast = useToast();
@@ -50,7 +52,7 @@ const gig = ({ gigs }) => {
     const chatExists = email => chats?.find(chat => (chat.users.includes(user.email) && chat.users.includes(email)))
     const [isChecked, setIsChecked] = useState(false);
     function handleCheckboxChange(event) {
-      setIsChecked(event.target.checked);
+        setIsChecked(event.target.checked);
     }
     const newChat = async () => {
         const input = gigs.emailId;
@@ -72,22 +74,24 @@ const gig = ({ gigs }) => {
             projectaReqStatus: false,
             gigPrice: gigs.price,
             promisedTime: gigs.timeDuration,
-            category:gigs.category,
+            category: gigs.category,
             id: iid,
-            timeFact:isChecked
+            timeFact: isChecked,
+            sug
         }
         addProject(dataToSubmit)
     }
-    async function checkProject(){
+    async function checkProject() {
         const docRef = doc(db, "project", iid);
-    const docSnaps = await getDoc(docRef);
-    if(docSnaps.exists()){
-        setdocsnaps(docSnaps)}
+        const docSnaps = await getDoc(docRef);
+        if (docSnaps.exists()) {
+            setdocsnaps(docSnaps)
+        }
     }
-    const [docSnap,setdocsnaps] = useState()
+    const [docSnap, setdocsnaps] = useState()
     useEffect(() => {
         checkProject();
-      }, [user]);
+    }, [user]);
     return (
         <Container maxW={'7xl'} onLoad={notf}>
             <SimpleGrid
@@ -169,15 +173,6 @@ const gig = ({ gigs }) => {
                             </SimpleGrid>
                         </Box>
                         <Box>
-                            {/* <Text
-                  fontSize={{ base: '16px', lg: '18px' }}
-                  color={useColorModeValue('yellow.500', 'yellow.300')}
-                  fontWeight={'500'}
-                  textTransform={'uppercase'}
-                  mb={'4'}>
-                  Product Details
-                </Text> */}
-
                             <List spacing={2}>
                                 <ListItem>
                                     <Text as={'span'} fontWeight={'bold'}>
@@ -228,15 +223,19 @@ const gig = ({ gigs }) => {
                             <ListItem><Text as='i'>{gigs.title}</Text></ListItem>
                             <ListItem><Text as='i'>Expected Delivery Time : {gigs.timeDuration}</Text></ListItem>
                             <ListItem><Text as='i'>₹{gigs.price}</Text></ListItem>
+                            <Textarea placeholder="enter decriptiom about the here or for further convertion chat is available"
+                                value={sug}
+                                onChange={(e) => setSug(e.target.value)}></Textarea>
                             <Checkbox size='md' checked={isChecked}
                                 onChange={handleCheckboxChange} >Take your time </Checkbox>
                         </List>
-                    </DrawerBody>  : <DrawerBody><Text>You have already a project running!!!!!!</Text></DrawerBody>}
+                        <Text as='i' >For further convertion chat is available</Text>
+                    </DrawerBody> : <DrawerBody><Text>You have already a project running!!!!!!</Text></DrawerBody>}
                     <DrawerFooter>
                         <Button variant='outline' mr={3} onClick={onClose}>
                             Cancel
                         </Button>
-                        {!docSnap ? <Button  colorScheme='blue' onClick={() => handleSubmit()}>Confirm</Button>: <Button disabled={true}>Confirm</Button>}
+                        {!docSnap ? <Button colorScheme='blue' onClick={() => handleSubmit()}>Confirm</Button> : <Button disabled={true}>Confirm</Button>}
                     </DrawerFooter>
                 </DrawerContent>
             </Drawer>
@@ -252,7 +251,7 @@ export async function getServerSideProps(context) {
     const docSnap = await getDoc(docRef);
     return {
         props: {
-            gigs: ( docSnap.data()),
+            gigs: (docSnap.data()),
         },
     };
 }

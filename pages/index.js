@@ -8,8 +8,7 @@ import { auth, db } from '../firebase'
 
 import Link from 'next/link'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { useState } from 'react'
-import { useCollection } from 'react-firebase-hooks/firestore'
+
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -39,6 +38,7 @@ export default function Home({ gigs }) {
       })
     }
   }
+
   return (
     <>
       <Head>
@@ -70,7 +70,6 @@ export default function Home({ gigs }) {
 }
 
 export async function getServerSideProps(context) {
-
   const q = await getDocs(collection(db, "Gigs"), where('user', '==', true));
   const gigs = q.docs && q.docs.length > 0 ? q.docs.map((doc) => {
     return {

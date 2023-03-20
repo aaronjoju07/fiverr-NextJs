@@ -1,7 +1,9 @@
 import React from 'react'
-import { Avatar, Box, Center, Heading, SimpleGrid, Text } from "@chakra-ui/react";
+import { Avatar, Box, Button, Center, Heading, SimpleGrid, Text } from "@chakra-ui/react";
 import useAuth from '../hooks/useAuth';
 import Profile from '../components/Profile';
+import DisplayGig from '../components/DisplayGig';
+import Link from 'next/link';
 
 const profile = ({use}) => {
     
@@ -23,10 +25,12 @@ const profile = ({use}) => {
               >
                 <Box>
                 <Text fontWeight="bold">Email</Text>
-                <Text>{use.email}
-                </Text>
-                <Text fontWeight="bold">Phone</Text>
-                <Text>(555) 555-5555</Text>
+                <Text>{use.email}</Text>
+                <Box h={3}></Box>
+                {/* <Text fontWeight="bold">Phone</Text> */}
+                <Link href={'/addGig'}>
+                <Button  p={3} w={'100%'}>Gig & Project</Button>
+                </Link>
                 </Box>
             </SimpleGrid>
         </Box>

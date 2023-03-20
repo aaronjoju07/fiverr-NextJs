@@ -26,9 +26,27 @@ const createUserInFirestore = async ({uid,name,email,photoUrl}) => {
     displayName: name,
     email:email,
     photoURL:photoUrl,
+    adcardno:null,
     lastSceen:serverTimestamp(),
   },{merge:true});
-   
-    
 }; 
-export {addUser , createUserInFirestore}
+const toggleTodoStatus = async ({id}) =>{
+  try {
+     const todoRef = doc(db,"project",id)
+     await updateDoc(todoRef,{
+      projectaReqStatus:true
+     })
+  } catch (error) {
+      console.log(error)
+  }
+}
+const deleteTodo = async ({id}) => {
+  try {
+    const todoRef = doc(db, "project", id);
+    await deleteDoc(todoRef);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export {addUser , createUserInFirestore,toggleTodoStatus,deleteTodo}

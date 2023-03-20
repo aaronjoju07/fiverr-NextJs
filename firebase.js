@@ -5,12 +5,12 @@ import {getStorage} from 'firebase/storage'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyACzUMxYWlhdUeeFMO_c-MtqzJ2jBWR1DI",
-  authDomain: "application-1-f4cd6.firebaseapp.com",
-  projectId: "application-1-f4cd6",
-  storageBucket: "application-1-f4cd6.appspot.com",
-  messagingSenderId: "186308642213",
-  appId: "1:186308642213:web:1acb1cd09db24ba919544c"
+  apiKey: "AIzaSyBIqe1M8zt2aFO1oecvrf2FtCQIo8n7yJ0",
+  authDomain: "twitter-1da38.firebaseapp.com",
+  projectId: "twitter-1da38",
+  storageBucket: "twitter-1da38.appspot.com",
+  messagingSenderId: "53024637179",
+  appId: "1:53024637179:web:9170c72c645ec02420705e"
 };
 
 
