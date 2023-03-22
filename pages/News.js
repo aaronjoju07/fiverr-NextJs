@@ -8,6 +8,7 @@ import {
   Avatar,
   useColorModeValue,
 } from '@chakra-ui/react';
+import Head from 'next/head';
 
 export default function blogPostWithImage() {
   return (

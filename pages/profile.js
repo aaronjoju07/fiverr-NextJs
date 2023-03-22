@@ -4,6 +4,7 @@ import useAuth from '../hooks/useAuth';
 import Profile from '../components/Profile';
 import DisplayGig from '../components/DisplayGig';
 import Link from 'next/link';
+import Head from 'next/head';
 
 const profile = ({use}) => {
     

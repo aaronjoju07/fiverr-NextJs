@@ -1,5 +1,6 @@
 import { VStack } from "@chakra-ui/react";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
+import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import DisplayProject from "../components/Project/DisplayProject";
