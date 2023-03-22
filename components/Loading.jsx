@@ -15,7 +15,7 @@ const Loading = () => {
   >
   <Logo />
   <RiseLoader
-  size={10}
+  size={8}
  />
     {/* <Spinner size="xl" color="blue.500" /> */}
   </Box>

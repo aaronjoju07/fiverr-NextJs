@@ -9,7 +9,7 @@ export default function Logo(){
         justifyItems='center'
        
          >
-            <Image  src="/fiverr.svg"
+            <Image  src="/123.svg"
       alt="Picture of the author"
       boxSize={125}
   />

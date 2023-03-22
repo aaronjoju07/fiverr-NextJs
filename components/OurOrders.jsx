@@ -22,6 +22,7 @@ import { auth, db } from '../firebase';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import { CheckCircleIcon, NotAllowedIcon, TimeIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 
 const BASE_URL = 'https://mahmad.me';
 
@@ -35,6 +36,15 @@ const posts = [
     published_at: '21st January 2021'
   }
 ];
+const createCheckoutSession = async (category,gigPrice,id,pid) => {
+  const cartItem = {category,gigPrice,id,pid}
+  fetch('api/checkout_sessions', { method: 'POST',body: cartItem })
+      .then(res => {
+          console.log(res)
+          // window.location = res.data.sessionURL
+      })
+      .catch(err => console.log(err))
+}
 
 const FeaturedArticles = () => {
   const [user] = useAuthState(auth);
@@ -71,7 +81,7 @@ const FeaturedArticles = () => {
           {todos &&
             todos.map(
               (
-                {
+                {id,
                   category,
                   gigUser,
                   gigPrice,
@@ -148,8 +158,8 @@ const FeaturedArticles = () => {
                     LastUpdate : <TimeIcon color={'blue.500'} /> {update.toDate().toLocaleDateString()}-{update.toDate().toLocaleTimeString()}
                     </Text>
                     {(status == 'Completed' && !payment) &&<Text as={'i'}>
-                      Pay : <Button size='sm' variant={'ghost'}>
-                        {gigPrice}
+                      <Button size='sm' variant={'ghost'}>
+                       Pay :{gigPrice}
                       </Button>
                     </Text>}
                   </VStack>
