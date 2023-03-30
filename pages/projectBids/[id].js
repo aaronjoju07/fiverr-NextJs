@@ -16,6 +16,7 @@ import {
   ButtonGroup,
   Avatar,
   Box,
+  Flex,
 } from '@chakra-ui/react'
 import { CheckIcon, DeleteIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router';

@@ -1,9 +1,9 @@
 import { addDoc, collection, deleteDoc, doc, Firestore, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
-const createProject = async ({ title, estPrice, category, desc, postedUser }) => {
+const createProject = async ({ title, estPrice, category, desc, postedUser,PostUserEmail,PostUserPic }) => {
     const docRef = await addDoc(collection(db, "PostProject"), {
-        title, estPrice, category, desc, postedUser,approved:false,
+        title, estPrice, category, desc, postedUser,approved:false,PostUserEmail,PostUserPic,
         postTime: serverTimestamp(),
     });
 }; 

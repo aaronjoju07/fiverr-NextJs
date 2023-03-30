@@ -10,6 +10,7 @@ import {
   Button,
   useToast,
   useDisclosure,
+  Box,
 } from '@chakra-ui/react';
 import { GoPrimitiveDot } from 'react-icons/go';
 import { DeleteIcon } from '@chakra-ui/icons';
@@ -31,8 +32,9 @@ const DisplayProject = ({ prj }) => {
   }
   const router = useRouter();
   function ClickFun(id,uman) {
+    router.push(`/projectBids/${id}`);
     if(uman==user.uid){
-      router.push(`/projectBids/${id}`);
+      
     }
   }
   const [user] = useAuthState(auth);
@@ -48,7 +50,8 @@ const DisplayProject = ({ prj }) => {
   }
   useEffect(() => {
     BidButton()
-  }, [user]); return (
+  }, [user]); 
+  return (
     <Container maxW="5xl" p={{ base: 5, md: 1 }}>
       <VStack
         boxShadow={useColorModeValue(
@@ -69,7 +72,7 @@ const DisplayProject = ({ prj }) => {
           >
             <Stack onClick={() => ClickFun(prj.id,prj.postedUser)} spacing={0} direction="row" alignItems="center">
               <Flex p={4}>
-                <Avatar size="md" name={prj.title} src={'/graphic&design.png'} />
+                <Avatar  size="md" name={prj.title} src={'/graphic&design.png'} />
               </Flex>
               <Flex direction="column" p={2}>
                 <Text
@@ -77,7 +80,12 @@ const DisplayProject = ({ prj }) => {
                   fontSize={{ base: 'sm', sm: 'md', md: 'lg' }}
                   as={"b"}
                 // dangerouslySetInnerHTML={{ __html: prj.title}}
-                >{prj.title} - {prj.category} </Text><Text>About : {prj.desc}</Text><Text> ₹{prj.estPrice}</Text>
+                >{prj.title} - {prj.category} </Text>
+                <Box display={'flex'}>
+                {prj.PostUserEmail && (<Avatar p={3} size={"xs"} name={prj.PostUserEmail} src={prj.postedUserPic} />)}
+                {prj.PostUserEmail && <Text>{prj.PostUserEmail}</Text>}
+                </Box>
+                <Text>About : {prj.desc}</Text><Text> ₹{prj.estPrice}</Text>
                 <Text
                   color={useColorModeValue('gray.400', 'gray.200')}
                   fontSize={{ base: 'sm', sm: 'md' }}

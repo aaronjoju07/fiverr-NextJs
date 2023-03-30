@@ -23,6 +23,7 @@ import {
     useDisclosure,
     Box,
     Select,
+    useToast,
 } from '@chakra-ui/react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../firebase';
@@ -31,24 +32,47 @@ import { createProject } from '../../pages/api/projects';
 const AddProject = () => {
     const [user] = useAuthState(auth);
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const [category,setCat] = useState()
-    const [title,setTitle] = useState()
-    const [estPrice,setEstPrice] = useState()
-    const [desc,setDesc] = useState()
+    const [category, setCat] = useState("")
+    const [title, setTitle] = useState("")
+    const [estPrice, setEstPrice] = useState(null)
+    const [desc, setDesc] = useState("")
     const cancelRef = useRef()
-    const [loading,setLoading] = useState()
+    const [loading, setLoading] = useState()
+    const toast = useToast();
     const AddButton = async () => {
+
         const projectDetails = {
-            title,estPrice,category,desc,postedUser:user.uid,
+            title, estPrice, category, desc, postedUser: user.uid, PostUserEmail: user.email, PostUserPic: user.photoURL,
         }
-        setLoading(true)
-        createProject(projectDetails)
-        setCat("")
-        setDesc("")
-        setEstPrice("")
-        setTitle("")
-        onClose()
-        setLoading(false)
+        if (title == '' || desc == '' || category == '' || estPrice == null) {
+            toast({
+                title: "You must fill all the fields",
+                status: "warning",
+                duration: 6000,
+                isClosable: true,
+            });
+        } else {
+            try {
+                setLoading(true)
+                createProject(projectDetails)
+                setCat("")
+                setDesc("")
+                setEstPrice("")
+                setTitle("")
+                setLoading(false)
+                onClose()
+            } catch (error) {
+                toast({
+                    title: "You must fill all the fields",
+                    status: "warning",
+                    duration: 6000,
+                    isClosable: true,
+                });
+            }
+
+        }
+
+
     }
     return (
 
@@ -79,20 +103,20 @@ const AddProject = () => {
                                 >
                                     <VStack spacing={4} w="100%">
                                         <Stack w="100%" spacing={3} direction={{ base: 'column', md: 'row' }}>
-                                            <FormControl id="name">
+                                            <FormControl isRequired id="name">
                                                 <FormLabel>Project Title</FormLabel>
                                                 <Input value={title} onChange={(e) => setTitle(e.target.value)} type="text" placeholder="Title" rounded="md" />
                                             </FormControl>
-                                            <FormControl id="email">
+                                            <FormControl isRequired id="email">
                                                 <FormLabel>Estimated Price</FormLabel>
                                                 <Input value={estPrice} onChange={(e) => setEstPrice(e.target.value)} type="number" placeholder="" rounded="md" />
                                             </FormControl>
                                         </Stack>
-                                        <FormControl id="subject">
+                                        <FormControl isRequired id="subject">
                                             <FormLabel>Category</FormLabel>
                                             <Select mb={4}
-                                            value={category} 
-                                            onChange={(e) => setCat(e.target.value)}
+                                                value={category}
+                                                onChange={(e) => setCat(e.target.value)}
                                             >
                                                 <option
                                                     value={""}
@@ -144,7 +168,9 @@ const AddProject = () => {
                             <Button ref={cancelRef} onClick={onClose}>
                                 Cancel
                             </Button>
-                            <Button colorScheme='green' onClick={() => AddButton()} ml={3}>
+                            <Button colorScheme='green'
+                                onClick={() => AddButton()} ml={3}
+                            >
                                 Create
                             </Button>
                         </AlertDialogFooter>

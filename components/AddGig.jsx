@@ -18,7 +18,9 @@ import {
     Stack,
     Textarea,
     Box,
-    Divider
+    Divider,
+    Flex,
+    Image
 } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
@@ -48,21 +50,40 @@ export default function AddGig() {
             url,
             cat
         }
-        setLoading(true)
-        await addUser(addCurrentUser);
-        console.log(addCurrentUser);
-        toast({ title: "User created successfully", status: "success" });
-        onClose(true)
-        setTitle("")
-        setCat("")
-        setDes("")
-        setSub("")
-        setNotf("")
-        setTime("")
-        setPrice()
-        setTags([])
-        setLoading(false)
-        onClose()
+        if (des === '' || cat === '' || title.length < 1 || sub.length < 1 || time === null || price === null) {
+            toast({
+                title: "You fill all the fields",
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+            });
+        } else {
+            if (url.length < 1) {
+                toast({
+                    title: "IMAGE NOT UPLOADED",
+                    // status: "error",
+                    duration: 9000,
+                    isClosable: true,
+                });
+            } else {
+                setLoading(true)
+                await addUser(addCurrentUser);
+                console.log(addCurrentUser);
+                toast({ title: "User created successfully", status: "success" });
+                onClose(true)
+                setTitle("")
+                setCat("")
+                setDes("")
+                setSub("")
+                setNotf("")
+                setTime("")
+                setPrice()
+                setTags([])
+                setLoading(false)
+                onClose()
+            }
+        }
+
 
     }
     const [title, setTitle] = React.useState("");
@@ -115,6 +136,7 @@ export default function AddGig() {
                 },
                 (error) => {
                     // Handle unsuccessful uploads
+                    console.log(error)
                 },
                 () => {
                     // Handle successful uploads on complete
@@ -144,17 +166,17 @@ export default function AddGig() {
                     <ModalHeader>Add Gig</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody >
-                        <Input mb={4} required
+                        <Input mb={4} isRequired
                             placeholder="Title"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                         />
-                        <Textarea mb={4} required
+                        <Textarea mb={4} isRequired
                             placeholder="Aboout Gig"
                             value={des}
                             onChange={(e) => setDes(e.target.value)}
                         />
-                        <Select mb={4} value={cat} onChange={(e) => setCat(e.target.value)} required >
+                        <Select mb={4} value={cat} onChange={(e) => setCat(e.target.value)} isRequired >
                             <option
                                 value={""}
                                 style={{ color: "yellow", fontWeight: "bold" }}
@@ -197,7 +219,7 @@ export default function AddGig() {
                                 Tutorial
                             </option> */}
                         </Select>
-                        <Input mb={4} required
+                        <Input mb={4} isRequired
                             placeholder="Subject"
                             value={sub}
                             onChange={(e) => setSub(e.target.value)}
@@ -207,27 +229,28 @@ export default function AddGig() {
                             value={notf}
                             onChange={(e) => setNotf(e.target.value)}
                         />
-                        <Box>
-                        <Input mb={4} required
-                            type='number'
-                            placeholder="Completion Time"
-                            value={time}
-                            onChange={(e) => setTime(e.target.value)}
-                        />
-                        <Text>Days</Text>
+                        <Box display={'flex'} alignItems={'center'} justifyContent={'center'} w={'80%'} >
+                            <Input mb={4} isRequired
+                                type='number'
+                                placeholder="Completion Time"
+                                value={time}
+                                onChange={(e) => setTime(e.target.value)}
+                            />
+                            <Text p={3}>Days</Text>
                         </Box>
-                        <Button mb={4}
-                            width='100%'
-                        >
-                            <input type="file" onChange={handleSubmit} />
-                        </Button>
-                        {/* <Input mb={4}
-                            // type='number'
-                            placeholder="Benefits"
-                            value={ben}
-                            onChange={(e) => setBen(e.target.value)}
-                        /> */}
-                        <Input mb={4} required
+                        <Flex>
+                            <Button mb={4}
+                                width='60%' isRequired>
+                                <input type="file" onChange={handleSubmit} />
+                            </Button>
+                            {!url.length<1 && <Image p={2}
+                                boxSize='100px' rounded={'lg'}
+                                objectFit='cover'
+                                src={url}
+                                alt='Dan Abramov'
+                            />}
+                        </Flex>
+                        <Input mb={4} isRequired
                             maxLength={10}
                             type='number'
                             placeholder="Price"
@@ -259,7 +282,6 @@ export default function AddGig() {
 
                     <ModalFooter>
                         <Button variant='ghost' mr={3}
-
                             spinner={<BeatLoader size={8} color='white' />}
                             colorScheme='blue'
                             onClick={onClose}
@@ -268,7 +290,8 @@ export default function AddGig() {
                         </Button>
 
                         {!loading && user ?
-                            (<Button onClick={() => handleClick()} colorScheme='blue' >Add</Button>) :
+                            (<Button onClick={() => handleClick()} colorScheme='blue'
+                            >Add</Button>) :
                             (<Button
                                 isLoading
                                 colorScheme='blue'

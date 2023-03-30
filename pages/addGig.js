@@ -1,7 +1,7 @@
 import { Box, HStack, Divider, Stack, Text, VStack, Heading } from '@chakra-ui/react'
 import { collection, getDocs, onSnapshot, query, where } from 'firebase/firestore'
 import Head from 'next/head'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import AddGig from '../components/AddGig'
 import DisplayGig from '../components/DisplayGig'
@@ -62,26 +62,27 @@ const addGig = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/123.svg" />
       </Head>
-<Box>
+      <Box>
 
-      <Box p={1} display={'flex'} alignItems={'center'} justifyContent={'center'}><Heading as='h2' size='xl'>Gig</Heading></Box>
-      <Box display={'flex'} alignItems={'center'} justifyContent={'center'}>{todos.length > 0 ? (null) : (<AddGig todo={todos} />)} </Box>
-      <Box  p={5}  display={'flex'}
-        alignItems={'center'}
-        justifyContent={'center'}>
-        {todos && todos.map((todo) => (
-          <DisplayGig key={todo.id} gig={todo} />
-        ))}
+        <Box p={1} display={'flex'} alignItems={'center'} justifyContent={'center'}><Heading as='h2' size='xl'>Gig</Heading></Box>
+        <Box display={'flex'} alignItems={'center'} justifyContent={'center'}>{todos.length > 0 ? (null) : (<AddGig todo={todos} />)} </Box>
+        <Box p={5} display={'flex'}
+          alignItems={'center'}
+          justifyContent={'center'}>
+          {todos && todos.map((todo) => (
+            <DisplayGig key={todo.id} gig={todo} />
+          ))}
+
+        </Box>
+        <Divider />
+        {prj && <Box p={1} display={'flex'} alignItems={'center'} justifyContent={'center'}><Heading as='h2' size='xl'>Project</Heading></Box>}
+        <Box display={'flex'} alignItems={'center'} justifyContent={'center'}><AddProject /></Box>
+        <VStack alignItems={'center'} p={5}>
+          {prj && prj.map((prje) => (
+            <DisplayProject key={prje.id} prj={prje} />
+          ))}
+        </VStack>
       </Box>
-      <Divider />
-      {prj && <Box p={1} display={'flex'} alignItems={'center'} justifyContent={'center'}><Heading as='h2' size='xl'>Project</Heading></Box>}
-      <Box display={'flex'} alignItems={'center'} justifyContent={'center'}><AddProject /></Box>
-      <VStack alignItems={'center'} p={5}>
-        {prj && prj.map((prje) => (
-          <DisplayProject key={prje.id} prj={prje} />
-        ))}
-      </VStack>
-</Box>
     </>
 
   )

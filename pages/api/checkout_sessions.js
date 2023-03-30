@@ -2,29 +2,33 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
-    const item = req.body.cartItem
-    console.log(cartItem)
-    const transformedItems = {
-        price_data: {
-            currency: "ind",
-            product_data: {
-                name: item.category,
-                // images: [req.headers.origin+item.image],
-            },
-            unit_amount: item.gigPrice * 100,
-        },
-        quantity: 1,
-    }
     try {
-      // Create Checkout Sessions from body params.
+       // Create a Product object
+       const product = await stripe.products.create({
+        name: 'My Product', // Replace with your product name
+        description: 'A description of my product', // Replace with your product description
+      });
+
+      // Create a Price object
+      const price = await stripe.prices.create({
+        unit_amount: 9000, // the price in cents
+        currency: 'inr',
+        product: product.id, // pass the ID of the Product object
+      });
+
       const session = await stripe.checkout.sessions.create({
-        line_items: transformedItems,
+        line_items: [
+          {
+            price: price.id,
+            quantity: 1,
+          },
+        ],
         mode: 'payment',
         success_url: `${req.headers.origin}/?success=true`,
-        cancel_url: `${req.headers.origin}/`,
+        cancel_url: `${req.headers.origin}/?canceled=true`,
+        // billing_address_collection: 'null', // remove billing address section
       });
-    //   res.redirect(303, session.url);
-    res.json({"sessionURL": session.url});
+      res.redirect(303, session.url);
     } catch (err) {
       res.status(err.statusCode || 500).json(err.message);
     }

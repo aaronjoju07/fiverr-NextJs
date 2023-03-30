@@ -14,7 +14,7 @@ import {
   Button,
   color
 } from '@chakra-ui/react';
-import NextLink from 'next/link';
+import { loadStripe } from '@stripe/stripe-js';
 import { MotionBox } from './motion';
 import { CommentIcon, HeartIcon } from './icons';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -22,7 +22,10 @@ import { auth, db } from '../firebase';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import { CheckCircleIcon, NotAllowedIcon, TimeIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router';
-import axios from 'axios';
+
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+);
 
 const BASE_URL = 'https://mahmad.me';
 
@@ -74,6 +77,17 @@ const FeaturedArticles = () => {
   function cliclChat(){
     router.push(`/chat`);
   }
+useEffect(() => {
+    // Check to see if this is a redirect back from Checkout
+    const query = new URLSearchParams(window.location.search);
+    if (query.get('success')) {
+      console.log('Order placed! You will receive an email confirmation.');
+    }
+
+    if (query.get('canceled')) {
+      console.log('Order canceled -- continue to shop around and checkout when you’re ready.');
+    }
+  }, [])
   return (
     <Container maxW="4xl" p={{ base: 5, md: 1 }}>
       <VStack align="start" spacing={8} width="100%">
@@ -158,9 +172,12 @@ const FeaturedArticles = () => {
                     LastUpdate : <TimeIcon color={'blue.500'} /> {update.toDate().toLocaleDateString()}-{update.toDate().toLocaleTimeString()}
                     </Text>
                     {(status == 'Completed' && !payment) &&<Text as={'i'}>
-                      <Button size='sm' variant={'ghost'}>
+                    <form action="/api/checkout_sessions" method="POST">
+
+                      <Button type="submit" role="link" size='sm' variant={'ghost'}>
                        Pay :{gigPrice}
                       </Button>
+                      </form>
                     </Text>}
                   </VStack>
                 </MotionBox>
