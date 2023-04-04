@@ -1,3 +1,4 @@
+import { ViewIcon } from '@chakra-ui/icons';
 import { chakra, Icon, Avatar, Box, Divider, Heading, HStack, Image, Link, Skeleton, Stack, Text, Tooltip, useColorModeValue, Card, CardBody } from '@chakra-ui/react'
 import { collection, onSnapshot, query } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
@@ -36,7 +37,8 @@ const DisplayGig = ({ gig }) => {
       },
     ],
   };
-
+  const totalCount = todos.map((data) => data.count).reduce((acc, curr) => acc + curr, 0);
+  console.log(totalCount);
   return (
     <>
 
@@ -56,15 +58,22 @@ const DisplayGig = ({ gig }) => {
 
           <Stack>
             <CardBody>
-              <Heading size='md'>{gig.title}</Heading>
+              <Heading textAlign={'center'}  size='md'>{gig.title}</Heading>
               <Stack>
                 <Text fontSize="md" color="gray.500">Subject : {gig.subject},{gig.description}</Text>
                 <Text fontSize="md" color="gray.500">{gig.timeDuration}</Text>
+                <Text fontSize="md" color="gray.500"> <ViewIcon /> {totalCount}</Text>
                 <Divider />
                 <Text fontSize="md" color="gray.500">
                   Benefits
                 </Text>
-                {gig.benefitTags.map((tags) => (<Text>{tags}</Text>))}
+                <HStack spacing={2} wrap='wrap'>
+                  {gig.benefitTags.map((tags) => (
+                    <Text key={tags} fontSize='sm' bg='gray.100' p={1} borderRadius='md'>
+                      {tags}
+                    </Text>
+                  ))}
+                </HStack>
                 <Text>₹{gig.price}</Text>
               </Stack>
             </CardBody>
@@ -72,7 +81,7 @@ const DisplayGig = ({ gig }) => {
         </Card>
 
         ) : (null)}
-        <div style={{ width: 600 }}>
+      <div style={{ width: 600 }}>
         {todos.length > 0 && <LineChart chartData={userData} />}
       </div>
     </>

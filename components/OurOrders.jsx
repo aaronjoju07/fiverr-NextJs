@@ -12,42 +12,43 @@ import {
   CircularProgress,
   CircularProgressLabel,
   Button,
-  color
 } from '@chakra-ui/react';
 import { loadStripe } from '@stripe/stripe-js';
 import { MotionBox } from './motion';
-import { CommentIcon, HeartIcon } from './icons';
+import { CommentIcon } from './icons';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '../firebase';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import { CheckCircleIcon, NotAllowedIcon, TimeIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router';
 
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-);
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+const handleCheckout = async (gigPrice) => {
+  
+  try {
+    const lineItems = { gigPrice}
+    const { session } = await fetch('/api/checkout_sessions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ lineItems }),
+    }).then(res => res.json())
 
-const BASE_URL = 'https://mahmad.me';
+    const stripe = await stripePromise
+    const { error } = await stripe.redirectToCheckout({ sessionId: session.id })
 
-const posts = [
-  {
-    title: 'Started 2022 by updating portfolio website',
-    description: `I was thinking about making some changes in my portfolio website since past few months. I couldn't...`,
-    slug: '/blog/started-2022-by-updating-portfolio-website-1jde-temp-slug-4553258',
-    positive_reactions_count: '189',
-    comments_count: '26',
-    published_at: '21st January 2021'
+    if (error) {
+      if (error instanceof Error) throw new Error(error.message)
+    } else {
+      throw error
+    }
+  } catch (error) {
+    console.log(error)
   }
-];
-const createCheckoutSession = async (category,gigPrice,id,pid) => {
-  const cartItem = {category,gigPrice,id,pid}
-  fetch('api/checkout_sessions', { method: 'POST',body: cartItem })
-      .then(res => {
-          console.log(res)
-          // window.location = res.data.sessionURL
-      })
-      .catch(err => console.log(err))
-}
+};
+
+
 
 const FeaturedArticles = () => {
   const [user] = useAuthState(auth);
@@ -100,15 +101,8 @@ useEffect(() => {
                   gigUser,
                   gigPrice,
                   payment,
-                  pid,
                   progress,
-                  projectaReqStatus,
-                  promisedTime,
-                  reqTime,
-                  reqUser,
                   status,
-                  sug,
-                  timeFlex,
                   update
                 },
                 i
@@ -172,12 +166,7 @@ useEffect(() => {
                     LastUpdate : <TimeIcon color={'blue.500'} /> {update.toDate().toLocaleDateString()}-{update.toDate().toLocaleTimeString()}
                     </Text>
                     {(status == 'Completed' && !payment) &&<Text as={'i'}>
-                    <form action="/api/checkout_sessions" method="POST">
-
-                      <Button type="submit" role="link" size='sm' variant={'ghost'}>
-                       Pay :{gigPrice}
-                      </Button>
-                      </form>
+                    <Button onClick={(e) => handleCheckout(gigPrice)}>Pay {gigPrice}</Button>
                     </Text>}
                   </VStack>
                 </MotionBox>
