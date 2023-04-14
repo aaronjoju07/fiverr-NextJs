@@ -12,12 +12,10 @@ import {
   useDisclosure,
   Box,
 } from '@chakra-ui/react';
-import { GoPrimitiveDot } from 'react-icons/go';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '../../firebase';
 import Bid from './Bid';
-import { async } from '@firebase/util';
 import { doc, getDoc } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import { deleteProject } from '../../pages/api/projects';

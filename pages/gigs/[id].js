@@ -1,7 +1,6 @@
 import { ChatIcon, InfoIcon, TimeIcon } from '@chakra-ui/icons';
 import {
     Box,
-    chakra,
     Container,
     Stack,
     Text,
@@ -13,7 +12,6 @@ import {
     SimpleGrid,
     StackDivider,
     useColorModeValue,
-    VisuallyHidden,
     List,
     ListItem,
     useToast,
@@ -27,11 +25,10 @@ import {
     DrawerContent,
     DrawerCloseButton,
     useDisclosure,
-    Input,
     Checkbox,
     Textarea,
 } from '@chakra-ui/react';
-import { addDoc, collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, getDocs, onSnapshot, query, where } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '../../firebase';
@@ -40,7 +37,7 @@ import { useEffect, useRef, useState } from 'react';
 import { addProject } from '../api/project';
 
 const gig = ({ gigs }) => {
-    const [sug, setSug] = useState()
+    const [sug, setSug] = useState("")
     const { isOpen, onOpen, onClose } = useDisclosure()
     const btnRef = useRef()
     const toast = useToast();
@@ -64,9 +61,6 @@ const gig = ({ gigs }) => {
     function notf() {
         toast({ title: `${gigs.notification}`, isClosable: true, position: 'top' });
     }
-    const iid = user.uid + id
-    console.log(iid)
-    // console.log(gigs)
     const handleSubmit = async () => {
         const dataToSubmit = {
             reqUser: user.email,
@@ -75,22 +69,30 @@ const gig = ({ gigs }) => {
             gigPrice: gigs.price,
             promisedTime: gigs.timeDuration,
             category: gigs.category,
-            id: iid,
             timeFact: isChecked,
             sug
         }
         addProject(dataToSubmit)
+        console.log(dataToSubmit)
     }
-    async function checkProject() {
-        const docRef = doc(db, "project", iid);
-        const docSnaps = await getDoc(docRef);
-        if (docSnaps.exists()) {
-            setdocsnaps(docSnaps)
+    const [docData, setData] = useState([])
+    const refreshData = () => {
+        if (!user) {
+          setTodos([]);
+          return;
         }
-    }
-    const [docSnap, setdocsnaps] = useState()
+        const q = query(collection(db, "project"), where("gigUser", "==", gigs.emailId) && where("reqUser", "==", user.email));
+        onSnapshot(q, (querySnapchot) => {
+          let ar = [];
+          querySnapchot.docs.forEach((doc) => {
+            ar.push({ id: doc.id, ...doc.data() });
+          });
+          setData(ar);
+        });
+      };
+      console.log(docData.length)
     useEffect(() => {
-        checkProject();
+        refreshData()
     }, [user]);
     return (
         <Container maxW={'7xl'} onLoad={notf}>
@@ -217,7 +219,7 @@ const gig = ({ gigs }) => {
                     <DrawerCloseButton />
                     <DrawerHeader>Confirmation</DrawerHeader>
 
-                    {!docSnap ? <DrawerBody>
+                    {!(docData.length > 0) ? <DrawerBody>
                         <Text as='b'>Are you sure you want to request this gig?</Text>
                         <List>
                             <ListItem><Text as='i'>{gigs.title}</Text></ListItem>
@@ -235,7 +237,7 @@ const gig = ({ gigs }) => {
                         <Button variant='outline' mr={3} onClick={onClose}>
                             Cancel
                         </Button>
-                        {!docSnap ? <Button colorScheme='blue' onClick={() => handleSubmit()}>Confirm</Button> : <Button disabled={true}>Confirm</Button>}
+                        {!(docData.length > 0) ? <Button colorScheme='blue' onClick={() => handleSubmit()}>Confirm</Button> : <Button disabled={true}>Confirm</Button>}
                     </DrawerFooter>
                 </DrawerContent>
             </Drawer>

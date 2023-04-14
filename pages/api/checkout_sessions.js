@@ -1,4 +1,5 @@
 import Stripe from 'stripe'
+import { paymentUpdate } from './project';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 const handler = async (req, res) => {
@@ -8,6 +9,7 @@ const handler = async (req, res) => {
       const product = await stripe.products.create({
         name: 'My Product', // Replace with your product name
         description: 'A description of my product', // Replace with your product description
+        id:lineItems.id,
       });
 
       // Create a Price object
@@ -37,7 +39,6 @@ const handler = async (req, res) => {
       return res.status(e.statusCode || 500).json({ message: e.message })
     }
   }
-
   res.setHeader('Allow', 'POST')
   res.status(405).end('Method Not Allowed')
 }

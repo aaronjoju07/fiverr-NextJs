@@ -57,8 +57,8 @@ const Notification = () => {
           if (notfication.projectaReqStatus == false) {return(
             <PopoverBody>
             You have recieved a {notfication.category} project request from {notfication.reqUser}.
-            <ButtonGroup><Button size={'sm'} colorScheme='red'  onClick={() => handleTodoDelete(notfication.pid)}>Reject</Button>
-            <Button size={'sm'} colorScheme='whatsapp'  onClick={() => handleToggle(notfication.pid)}>Approve</Button></ButtonGroup>
+            <ButtonGroup><Button size={'sm'} colorScheme='red'  onClick={() => handleTodoDelete(notfication.id)}>Reject</Button>
+            <Button size={'sm'} colorScheme='whatsapp'  onClick={() => handleToggle(notfication.id)}>Approve</Button></ButtonGroup>
             </PopoverBody>
           )}
         })

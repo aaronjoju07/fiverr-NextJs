@@ -1,4 +1,4 @@
-import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { collection, doc, getDoc, onSnapshot, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '../../firebase';
@@ -20,10 +20,12 @@ import {
 } from '@chakra-ui/react'
 import { CheckIcon, DeleteIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router';
+import { BidApprove, addProjectBid, deleteBid } from '../api/project';
 const bids = () => {
   const router = useRouter();
   const [user] = useAuthState(auth);
   const [prjs, setPrj] = useState([]);
+  const [pr, setPr] = useState([]);
   const { id } = router.query;
   const projectData = () => {
     if (!user) {
@@ -42,21 +44,55 @@ const bids = () => {
       setPrj(ar);
     });
   };
-  console.log(prjs)
+  const prjDat =async () => {
+    if (!user) {
+      setPr([]);
+      return;
+    }
+
+    const docRef = doc(db, "PostProject", `${id}`);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      setPr(docSnap.data())
+      
+    } else {
+      // docSnap.data() will be undefined in this case
+      console.log("No such document!");
+    }
+  };
+  console.log(pr)
   useEffect(() => {
     projectData()
+    prjDat()
   }, [user]);
 
-  function clickok(){
-
+  function clickok(biderEmail,biderId,biderPic,bidId,BidAmt,desc){
+    const data={
+      biderEmail,biderId,biderPic,bidId,BidAmt
+    }
+    BidApprove(data)
+    const ProjectData={
+      BidUser:biderEmail,
+      User:user.email,
+      Price:BidAmt,
+      category:pr.category,
+      sug:desc,
+      title:pr.title
+    }
+    addProjectBid(ProjectData)
   }
 
-  function Deleteok() {
-    
+  function Deleteok(pid,id) {
+    const data ={
+      pid,id
+    }
+    console.log(data)
+    deleteBid(data)
   }
   return (
     <>
       <Box>
+      {pr.PostUserEmail}{pr.category}{pr.estPrice}{pr.title}{pr.postedUser}
         <TableContainer p={14}>
           <Table variant='simple'>
             {/* <TableCaption>I</TableCaption> */}
@@ -65,7 +101,7 @@ const bids = () => {
                 <Th>User</Th>
                 <Th>Description</Th>
                 <Th isNumeric>Price</Th>
-                <Th></Th>
+                {!pr.approved && <Th></Th>}
               </Tr>
             </Thead>
             <Tbody>
@@ -75,11 +111,11 @@ const bids = () => {
                   <Td>{prj.desc}</Td>
                   <Td isNumeric>₹{prj.estPrice}</Td>
                   <Td><ButtonGroup>
-                    <Button variant={'ghost'} onClick={()=>clickok()} ><CheckIcon color={'green.300'} /></Button>
-                    <Button variant={'ghost'} onClick={()=>Deleteok()}><DeleteIcon color={'red.200'} /></Button>
+                  {(!pr.approved && pr.postedUser == user.uid) && <Button variant={'ghost'} onClick={()=>clickok(prj.postedEmail,prj.postedUser,prj.postedUserPic,id,prj.estPrice,prj.desc)} ><CheckIcon color={'green.300'} /></Button>}
+                  {(!pr.approved && prj.postedUser == user.uid) &&<Button variant={'ghost'} onClick={()=>Deleteok(id,prj.id)}><DeleteIcon color={'red.200'} /></Button>}
                   </ButtonGroup></Td>
                 </Tr>
-              ))}
+      ))}
             </Tbody>
           </Table>
         </TableContainer>
