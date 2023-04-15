@@ -8,8 +8,8 @@ const handler = async (req, res) => {
       const { lineItems } = req.body
       const product = await stripe.products.create({
         name: 'My Product', // Replace with your product name
-        description: 'A description of my product', // Replace with your product description
-        id:lineItems.id,
+        description: `${lineItems.ids}`, // Replace with your product description
+        projectNum:lineItems.id
       });
 
       // Create a Price object

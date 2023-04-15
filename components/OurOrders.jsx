@@ -24,14 +24,14 @@ import { MotionBox } from './motion';
 import { CommentIcon } from './icons';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '../firebase';
-import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore';
+import { collection, onSnapshot, orderBy, query, where ,or} from 'firebase/firestore';
 import { CheckCircleIcon, NotAllowedIcon, TimeIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
-const handleCheckout = async (gigPrice, id) => {
+const handleCheckout = async (gigPrice, ids) => {
   try {
-    const lineItems = { gigPrice, id }
+    const lineItems = { gigPrice,ids}
     const { session } = await fetch('/api/checkout_sessions', {
       method: 'POST',
       headers: {
@@ -63,7 +63,7 @@ const FeaturedArticles = () => {
       setTodos([]);
       return;
     }
-    const q = query(collection(db, "project"), where("reqUser", "==", user.email) | where("BidUser", "==", user.email));
+    const q = query(collection(db, "project"), or(where("reqUser", "==", user.email), where("BidUser", "==", user.email)));
 
     onSnapshot(q, (querySnapchot) => {
       let ar = [];
@@ -83,17 +83,7 @@ const FeaturedArticles = () => {
   function cliclChat() {
     router.push(`/chat`);
   }
-  useEffect(() => {
-    // Check to see if this is a redirect back from Checkout
-    const query = new URLSearchParams(window.location.search);
-    if (query.get('success')) {
-      console.log('Order placed! You will receive an email confirmation.');
-    }
 
-    if (query.get('canceled')) {
-      console.log('Order canceled -- continue to shop around and checkout when you’re ready.');
-    }
-  }, [])
   const [tod, setTod] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cancelRef = React.useRef()
@@ -112,10 +102,8 @@ const FeaturedArticles = () => {
       });
       setTod(ar);
       onOpen()
-    });
-    
+    });   
     setLoading(false)
-
   }
   const [loading, setLoading] = useState(true)
   return (

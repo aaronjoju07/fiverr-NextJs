@@ -90,9 +90,28 @@ const addProject = async ({reqUser,gigUser,projectaReqStatus,gigPrice,promisedTi
     }
   }
    
-  const paymentUpdate = async ({id}) =>{
+  
+  const BidApprove = async ({biderEmail,biderId,biderPic,bidId,BidAmt}) =>{
+    try {
+      const todoRef = doc(db,"PostProject",bidId)
+      await updateDoc(todoRef,{
+        biderEmail,biderId,biderPic,bidId,BidAmt,approved:true,approvedTime:serverTimestamp()
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const deleteBid = async ({pid,id}) => {
+    try {
+      const todoRef = doc(db, `PostProject/${pid}/Bid`, id);
+      await deleteDoc(todoRef);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const paymentUpdate = async ({proId}) =>{
    try {
-      const todoRef = doc(db,"project",pid)
+      const todoRef = doc(db,"project",proId)
       await updateDoc(todoRef,{
         payment:true,
       //  update:serverTimestamp()
@@ -101,23 +120,4 @@ const addProject = async ({reqUser,gigUser,projectaReqStatus,gigPrice,promisedTi
        console.log(error)
    }
  }
-  
- const BidApprove = async ({biderEmail,biderId,biderPic,bidId,BidAmt}) =>{
-  try {
-     const todoRef = doc(db,"PostProject",bidId)
-     await updateDoc(todoRef,{
-      biderEmail,biderId,biderPic,bidId,BidAmt,approved:true,approvedTime:serverTimestamp()
-     })
-  } catch (error) {
-      console.log(error)
-  }
-}
-const deleteBid = async ({pid,id}) => {
-  try {
-    const todoRef = doc(db, `PostProject/${pid}/Bid`, id);
-    await deleteDoc(todoRef);
-  } catch (err) {
-    console.log(err);
-  }
-};
 export {addProject,createStatus,updateState,updateStatusTracker,paymentUpdate,BidApprove,deleteBid,addProjectBid}

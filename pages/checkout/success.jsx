@@ -6,15 +6,17 @@ import { CheckCircleIcon, CloseIcon, InfoIcon } from '@chakra-ui/icons';
 import { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../firebase';
+import { paymentUpdate } from '../api/project';
 
 const fetcher = (...args) => fetch(...args).then(res => res.json())
 
 function CheckoutSuccessPage() {
+  const [user] = useAuthState(auth);
    
   const {
     query: { sessionId }
   } = useRouter()
-console.log(sessionId)
+// console.log(sessionId)
   const URL = sessionId ? `/api/Stripe/${sessionId}` : null
   const { data: checkoutSession, error } = useSWR(URL, fetcher)
 
@@ -34,27 +36,22 @@ console.log(sessionId)
   const products = checkoutSession?.line_items?.data?.map(item => ({
     ...item.price.product,
     price: item.price.unit_amount,
-    quantity: item.quantity
+    quantity: item.quantity,
   }))
-  console.log(checkoutSession?.line_items?.data?.map(item => ({
-    ...item.price.product})))
+  const proId = checkoutSession?.line_items?.data[0].price.product.description
+  paymentUpdate({proId})
+  console.log(checkoutSession?.line_items?.data[0].price.product.description)
+
+  // console.log(checkoutSession?.line_items?.data?.map(item => ({
+  //   ...item.price.product})))
   const payment =
     checkoutSession?.payment_intent?.charges?.data[0]?.payment_method_details
   const subtotal = checkoutSession?.amount_subtotal
   const total = checkoutSession?.amount_total
   const discount = checkoutSession?.total_details?.amount_discount
   const tax = checkoutSession?.total_details?.amount_tax
-  useEffect(() => {
-    refreshData();
-  }, [user]);
-  function refreshData(){
-    console.log(products.map((p)=>(p.pid)))
-  }  
-  const [user] = useAuthState(auth);
-
   return (
     <>
-
     <Box justify-content={'center'} textAlign="center" py={10} px={6}>
       <CheckCircleIcon boxSize={'50px'} color={'green.500'} />
       <Heading as="h2" size="xl" mt={6} mb={2}>
@@ -84,7 +81,7 @@ console.log(sessionId)
               )}
       </Text>
     </Box>
-    {/* <div className='bg-white'>
+    <div className='bg-white'>
       <div className='max-w-3xl mx-auto px-4 py-16 sm:px-6 sm:py-24 lg:px-8'>
         <div className='max-w-xl'>
           <h1 className='text-sm font-medium text-indigo-600'>
@@ -238,7 +235,7 @@ console.log(sessionId)
           </div>
         </div>
       </div>
-    </div> */}
+    </div>
     </>
   )
 }

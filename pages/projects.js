@@ -11,8 +11,9 @@ import {
   CircularProgress,
   CircularProgressLabel,
   useToast,
+  Heading,
 } from '@chakra-ui/react'
-import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { collection, onSnapshot, query, where, or } from 'firebase/firestore';
 import Head from 'next/head';
 import { useEffect, useRef, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -25,16 +26,17 @@ const projects = () => {
   const toast = useToast();
   const [user] = useAuthState(auth);
   const [prjt, setTodos] = useState([]);
+  const [projects, setProject] = useState([]);
   const [status, setStat] = useState()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cancelRef = useRef()
-  console.log(prjt)
+
   const refreshData = () => {
     if (!user) {
       setTodos([]);
       return;
     }
-    const q = query(collection(db, "project"), where("gigUser", "==", user.email) | where("User", "==", user.email));
+    const q = query(collection(db, "project"), or(where("gigUser", "==", user.email), where("User", "==", user.email)));
     onSnapshot(q, (querySnapchot) => {
       let ar = [];
       querySnapchot.docs.forEach((doc) => {
@@ -43,10 +45,25 @@ const projects = () => {
       setTodos(ar);
     });
   };
+  const ProjectData = () => {
+    if (!user) {
+      setTodos([]);
+      return;
+    }
+    const q = query(collection(db, "project"), where("User", "==", user.email));
+    onSnapshot(q, (querySnapchot) => {
+      let ar = [];
+      querySnapchot.docs.forEach((doc) => {
+        ar.push({ id: doc.id, ...doc.data() });
+      });
+      setProject(ar);
+    });
+  };
   useEffect(() => {
+    ProjectData()
     refreshData();
   }, [user]);
-
+  console.log(projects)
   const updateStatus = async (id, status) => {
     await updateState({ id, status });
     await updateStatusTracker({ id, status })
@@ -86,14 +103,18 @@ const projects = () => {
                           <h2>
                             <AccordionButton>
                               <Box as="span" flex='1' textAlign='left' w={'100%'}>
-                                {prj.reqUser || prj.BidUser} - {prj.reqUser ? ("Gig") :("Project")}
+                                {prj.reqUser || prj.BidUser} - {prj.reqUser ? ("Gig") : ("Project")}
                               </Box>
                               <AccordionIcon />
                             </AccordionButton>
                           </h2>
                           <AccordionPanel pb={4}>
                             <List>
-                              {prj.title && (<ListItem>{prj.title}</ListItem>)}
+                              {prj.title && (<ListItem>
+                              <Heading as='h6' size='sm'>
+                                {prj.title}
+                              </Heading>
+                              </ListItem>)}
                               <ListItem>{prj.sug}</ListItem>
                               <ListItem>{prj.category}</ListItem>
                               <ListItem>Gig Price : {prj.gigPrice | prj.Price} </ListItem>
