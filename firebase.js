@@ -7,6 +7,7 @@ import {getStorage} from 'firebase/storage'
 const firebaseConfig = {
   apiKey: "AIzaSyBIqe1M8zt2aFO1oecvrf2FtCQIo8n7yJ0",
   authDomain: "twitter-1da38.firebaseapp.com",
+  databaseURL: "https://twitter-1da38-default-rtdb.firebaseio.com",
   projectId: "twitter-1da38",
   storageBucket: "twitter-1da38.appspot.com",
   messagingSenderId: "53024637179",

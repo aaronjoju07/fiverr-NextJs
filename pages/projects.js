@@ -20,17 +20,18 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import FeaturedArticles from '../components/OurOrders';
 import { auth, db } from '../firebase';
 import { updateState, updateStatusTracker } from './api/project';
+import UpdateStatusButton from '../components/UpdateStatusButton';
 
 
 const projects = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast();
   const [user] = useAuthState(auth);
   const [prjt, setTodos] = useState([]);
   const [projects, setProject] = useState([]);
   const [status, setStat] = useState()
-  const { isOpen, onOpen, onClose } = useDisclosure()
   const cancelRef = useRef()
-
+console.log(prjt)
   const refreshData = () => {
     if (!user) {
       setTodos([]);
@@ -64,22 +65,7 @@ const projects = () => {
     refreshData();
   }, [user]);
   // console.log(projects)
-  const updateStatus = async (id, status) => {
-try {
-  if (status != "") {
-    await updateState({ id, status });
-  await updateStatusTracker({ id, status })
-  onClose();
-  toast({
-    title: `${status} Status updated`,
-    status: 'success'
-  });
-  }
-  else {console.log("hello")}
-} catch (error) {
-  console.log("hello")
-}
-  };
+  
 
   return (
     <>
@@ -105,7 +91,7 @@ try {
                   {/* statusrun(prj.status) */ }
                   if (prj.projectaReqStatus == true) {
                     return (
-                      <Accordion key={prj.id} defaultIndex={[0]} allowMultiple>
+                      <Accordion key={prj.id}  allowMultiple>
                         <AccordionItem>
                           <h2>
                             <AccordionButton>
@@ -130,8 +116,8 @@ try {
                                 <CircularProgress size='40px' value={prj.progress} color='green.400'><CircularProgressLabel>{prj.progress}%</CircularProgressLabel></CircularProgress>
                               </ListItem>
                             </List>
-                            {prj.status != 'Completed' && <Button onClick={onOpen}>Update Status</Button>}
-                            <AlertDialog
+                            {/* {prj.status != 'Completed' && <Button onClick={onOpen}>Update Status</Button>} */}
+                            {/* <AlertDialog key={prj.id}
                               motionPreset='slideInBottom'
                               leastDestructiveRef={cancelRef}
                               onClose={onClose}
@@ -140,7 +126,7 @@ try {
                             >
                               <AlertDialogOverlay />
 
-                              <AlertDialogContent>
+                              <AlertDialogContent key={prj.id}>
                                 <AlertDialogHeader>Update the Status</AlertDialogHeader>
                                 <AlertDialogCloseButton />
                                 <AlertDialogBody>
@@ -182,15 +168,17 @@ try {
                                   <Button ref={cancelRef} onClick={onClose}>
                                     No
                                   </Button>
-                                  <Button colorScheme='green' ml={3} onClick={() => updateStatus(prj.id, status)}>
+                                  <Button key={prj.id} colorScheme='green' ml={3} onClick={() => updateStatus(prj.id, status)}>
                                     Update
                                   </Button>
                                 </AlertDialogFooter>
                               </AlertDialogContent>
-                            </AlertDialog>
+                            </AlertDialog> */}
+                            <UpdateStatusButton prjss={prj.id} />
                           </AccordionPanel>
                         </AccordionItem>
-                      </Accordion>)
+                      </Accordion>
+                      )
                   }
                 })}
               </Box>
