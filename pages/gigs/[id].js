@@ -81,7 +81,8 @@ const gig = ({ gigs }) => {
           setTodos([]);
           return;
         }
-        const q = query(collection(db, "project"), where("gigUser", "==", gigs.emailId) && where("reqUser", "==", user.email));
+        const q = query(collection(db, "project"), where("gigUser", "==", gigs.emailId) && where("reqUser", "==", user.email)
+         );
         onSnapshot(q, (querySnapchot) => {
           let ar = [];
           querySnapchot.docs.forEach((doc) => {

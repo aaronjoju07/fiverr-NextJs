@@ -63,15 +63,22 @@ const projects = () => {
     ProjectData()
     refreshData();
   }, [user]);
-  console.log(projects)
+  // console.log(projects)
   const updateStatus = async (id, status) => {
+try {
+  if (status != "") {
     await updateState({ id, status });
-    await updateStatusTracker({ id, status })
-    onClose();
-    toast({
-      title: `${status} Status updated`,
-      status: 'success'
-    });
+  await updateStatusTracker({ id, status })
+  onClose();
+  toast({
+    title: `${status} Status updated`,
+    status: 'success'
+  });
+  }
+  else {console.log("hello")}
+} catch (error) {
+  console.log("hello")
+}
   };
 
   return (
@@ -110,7 +117,7 @@ const projects = () => {
                           </h2>
                           <AccordionPanel pb={4}>
                             <List>
-                              {prj.title && (<ListItem>
+                              {prj.title && (<ListItem key={prj.id}>
                               <Heading as='h6' size='sm'>
                                 {prj.title}
                               </Heading>

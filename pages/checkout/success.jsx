@@ -52,7 +52,7 @@ function CheckoutSuccessPage() {
   const tax = checkoutSession?.total_details?.amount_tax
   return (
     <>
-    <Box justify-content={'center'} textAlign="center" py={10} px={6}>
+    <Box display={'flex'} flexDirection={'column'} alignItems={'center'} justify-content={'center'} textAlign="center" py={10} px={6}>
       <CheckCircleIcon boxSize={'50px'} color={'green.500'} />
       <Heading as="h2" size="xl" mt={6} mb={2}>
         Payment  Sucessfull
@@ -81,7 +81,7 @@ function CheckoutSuccessPage() {
               )}
       </Text>
     </Box>
-    <div className='bg-white'>
+    {/* <div className='bg-white'>
       <div className='max-w-3xl mx-auto px-4 py-16 sm:px-6 sm:py-24 lg:px-8'>
         <div className='max-w-xl'>
           <h1 className='text-sm font-medium text-indigo-600'>
@@ -235,7 +235,7 @@ function CheckoutSuccessPage() {
           </div>
         </div>
       </div>
-    </div>
+    </div> */}
     </>
   )
 }
