@@ -61,6 +61,12 @@ const AddProject = () => {
                 setTitle("")
                 setLoading(false)
                 onClose()
+                toast({
+                    title: "Project added successfully",
+                    status: "success",
+                    duration: 2000,
+                    isClosable: true,
+                });
             } catch (error) {
                 toast({
                     title: "You must fill all the fields",
@@ -108,7 +114,7 @@ const AddProject = () => {
                                                 <Input value={title} onChange={(e) => setTitle(e.target.value)} type="text" placeholder="Title" rounded="md" />
                                             </FormControl>
                                             <FormControl isRequired id="email">
-                                                <FormLabel>Estimated Price</FormLabel>
+                                                <FormLabel>Estimated Price(₹)</FormLabel>
                                                 <Input value={estPrice} onChange={(e) => setEstPrice(e.target.value)} type="number" placeholder="" rounded="md" />
                                             </FormControl>
                                         </Stack>

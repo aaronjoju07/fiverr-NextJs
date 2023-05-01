@@ -1,11 +1,12 @@
-import { Box, Image, Badge, Text, Flex } from '@chakra-ui/react';
+import { Box, Image, Badge, Text, Flex, useMediaQuery } from '@chakra-ui/react';
 
 const GigCArd = ({ gig }) => {
-  return (   
-         <Box p="5" maxW="320px" borderWidth="1px" marginLeft={"1rem"}>
-        <Image borderRadius="md"  src={gig.thumbnail} alt="pic" height={"13rem"} width={"18rem"} />
-        <Flex align="baseline" mt={2}>
-          {/* <Badge colorScheme="pink">Plus</Badge>
+  const [isLargerThanPhone] = useMediaQuery("(min-width: 480px)");
+  return (
+    <Box maxW="320px" borderWidth="1px" marginLeft={"1rem"} display={'flex'} flexDirection={'column'} W={{ base: "44vh", md: "80vh" }}>
+      <Image objectFit={'fill'} borderRadius="md" src={gig.thumbnail} alt="pic" height={"13rem"} width={"80vh"} />
+      <Flex align="baseline" mt={2}>
+        {/* <Badge colorScheme="pink">Plus</Badge>
           <Text
             ml={2}
             textTransform="uppercase"
@@ -15,18 +16,18 @@ const GigCArd = ({ gig }) => {
           >
             Verified &bull; Cape Town
           </Text> */}
-        </Flex>
-        <Text mt={2} fontSize="xl" fontWeight="semibold" lineHeight="short">
+      </Flex>
+      <Text mt={2} fontSize="xl" fontWeight="semibold" lineHeight="short">
         {gig.title}
-        </Text>
-        <Text mt={2}>₹{gig.price}</Text>
-        <Flex mt={2} align="center">
-          <Box  color="orange.400" />
-          <Text ml={1} fontSize="sm">
-            <b>4.84</b> (190)
-          </Text>
-        </Flex>
-      </Box>
+      </Text>
+      <Text mt={2}>₹{gig.price}</Text>
+      <Flex mt={2} align="center">
+        <Box color="orange.400" />
+        {/* <Text ml={1} fontSize="sm">
+          <b>4.84</b> (190)
+        </Text> */}
+      </Flex>
+    </Box>
   );
 };
 export default GigCArd;

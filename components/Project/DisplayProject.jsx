@@ -56,7 +56,7 @@ const DisplayProject = ({ prj }) => {
           '2px 6px 8px rgba(160, 174, 192, 0.6)',
           '2px 6px 8px rgba(9, 17, 28, 0.9)'
         )}
-        bg={useColorModeValue('gray.100', 'gray.800')}
+        bg={useColorModeValue('gray.50', 'gray.30')}
         rounded="md"
         overflow="hidden"
         spacing={0}

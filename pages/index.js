@@ -8,6 +8,7 @@ import { auth, db } from '../firebase'
 
 import Link from 'next/link'
 import { useAuthState } from 'react-firebase-hooks/auth'
+import Hero from '../components/Hero'
 
 
 
@@ -48,8 +49,9 @@ export default function Home({ gigs }) {
         <link rel="icon" href="/123.svg" />
       </Head>
       <Container maxW="7xl">
-        <CategoryButtons />
-        <Box p={4} display='flex'>
+      <Hero />
+        {/* <CategoryButtons /> */}
+        <Box p={4} display='flex' flexDirection={{ base: 'column', md: 'row' }}>
           {gigs && gigs.map((gig) => {
             if (gig.user != user.uid) {
               return (

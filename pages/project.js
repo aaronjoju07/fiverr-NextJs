@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import DisplayProject from "../components/Project/DisplayProject";
 import { auth, db } from "../firebase";
+import HeroProject from "../components/HeroProject";
 
 const project = () => {
   const [user] = useAuthState(auth);
@@ -39,6 +40,7 @@ const project = () => {
         <link rel="icon" href="/123.svg" />
       </Head>
     <VStack alignItems={'center'} p={5}>
+    <HeroProject />
         {prj && prj.map((prje) => (
           <DisplayProject key={prje.id} prj={prje} />
         ))}

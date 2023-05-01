@@ -241,13 +241,13 @@ export default function AddGig() {
                         <Flex>
                             <Button mb={4}
                                 width='60%' isRequired>
-                                <input type="file" onChange={handleSubmit} />
+                                <input type="file" onChange={handleSubmit} accept="image/png,image/jpeg" />
                             </Button>
                             {!url.length<1 && <Image p={2}
                                 boxSize='100px' rounded={'lg'}
                                 objectFit='cover'
                                 src={url}
-                                alt='Dan Abramov'
+                                alt='upload image'
                             />}
                         </Flex>
                         <Input mb={4} isRequired
