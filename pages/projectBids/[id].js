@@ -6,7 +6,7 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
+  Text,
   Tr,
   Th,
   Td,
@@ -17,6 +17,7 @@ import {
   Avatar,
   Box,
   Flex,
+  Heading,
 } from '@chakra-ui/react'
 import { CheckIcon, DeleteIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router';
@@ -91,9 +92,23 @@ const bids = () => {
   }
   return (
     <>
+      <Heading
+      p={7}
+      
+            fontWeight={600}
+            fontSize={{ base: '2xl', sm: '4xl', md: '6xl' }}
+            lineHeight={'80%'}>
+           {/* {pr.title} <br /> */}
+            <Text as={'span'} color={'green.400'}>
+            {pr.title}
+            </Text>
+            <Text color={'gray.500'}>
+            {pr.category}
+          </Text>
+          </Heading>
       <Box>
-      {pr.PostUserEmail}{pr.category}{pr.estPrice}{pr.title}{pr.postedUser}
-        <TableContainer p={14}>
+      {/* {pr.PostUserEmail}{pr.postedUser} */}
+        <TableContainer p={1}>
           <Table variant='simple'>
             {/* <TableCaption>I</TableCaption> */}
             <Thead>
