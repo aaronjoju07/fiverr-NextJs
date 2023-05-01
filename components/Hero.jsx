@@ -35,7 +35,7 @@ import {
               </Text>{' '} */}
             </Heading>
             <Text fontSize={{ base: 'md', lg: 'lg' }} color={'gray.500'}>
-            oin our platform and start your journey towards financial independence by showcasing your skills to a global audience of clients.
+            Join our platform and start your journey towards financial independence by showcasing your skills to a global audience of clients.
             </Text>
             {/* <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
               <Button
