@@ -28,6 +28,8 @@ const bids = () => {
   const [prjs, setPrj] = useState([]);
   const [pr, setPr] = useState([]);
   const { id } = router.query;
+  const toast = useToast();
+
   const projectData = () => {
     if (!user) {
       setPrj([]);
@@ -81,14 +83,26 @@ const bids = () => {
       title:pr.title
     }
     addProjectBid(ProjectData)
+    toast({
+      title: "success",
+      status: "success",
+      duration: 9000,
+      isClosable: true,})
+    router.push(`/project}`);
   }
 
   function Deleteok(pid,id) {
     const data ={
       pid,id
     }
-    console.log(data)
     deleteBid(data)
+    toast({
+      title: "deleted",
+      status: "error",
+      duration: 9000,
+      isClosable: true,})
+    router.push(`/project}`);
+    console.log(data)
   }
   return (
     <>

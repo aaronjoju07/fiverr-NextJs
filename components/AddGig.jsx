@@ -57,6 +57,25 @@ export default function AddGig() {
                 duration: 9000,
                 isClosable: true,
             });
+        } else if( price == null || price == 0){ toast({
+            title: "You fill all the fields",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+        });} else if (price.length>5) {
+            toast({
+                title: "You fill all the field",
+                // status: "warning",
+                duration: 9000,
+                isClosable: true,
+            });
+        } else if (time > 365) {
+            toast({
+                title: "only one year duration can be provided maximum",
+                // status: "warning",
+                duration: 9000,
+                isClosable: true,
+            });
         } else {
             if (url.length < 1) {
                 toast({
